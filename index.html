@@ -7,8 +7,8 @@
 
     <title>Patient Record System</title>
 
-    <link rel="stylesheet" href="style.css" >
-    </head> 
+    <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
 
@@ -17,100 +17,125 @@
 
     <h2>Add Patient Record</h2>
 
-        <form id="patientForm">
+    <form id="patientForm">
 
-            <label for="patientId">Patient ID:</label>
-            <input type="text" id="patientId" name="patientId" required>
+        <label for="patientId">Patient ID:</label>
+        <input type="text" id="patientId" name="patientId" required>
 
-            <br><br>
+        <br><br>
 
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
 
-            <br><br>
-
-
-
-              <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required>
-
-            <br><br>
-
-            <label for="dateOfBirth">Date of Birth:</label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
-
-            <br><br>
+        <br><br>
 
 
-             <label for="height">Height (cm):</label>
-            <input type="number" id="height" name="height" required>
 
-            <br><br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
 
+        <br><br>
 
-            <label for="weight">Weight (kg) :</label>
-            <input type="number" id="weight" name="weight" required>
+        <label for="dateOfBirth">Date of Birth:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
 
-            <br><br>
-
-            <label for="sex">Sex:</label>
-            <select id="sex" name="sex" required>
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
+        <br><br>
 
 
-            <br><br>
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" name="height" required>
+
+        <br><br>
 
 
-            <label for="mobile">Mobile:</label>
-            <input type="text" id="mobile" name="mobile" required>
+        <label for="weight">Weight (kg) :</label>
+        <input type="number" id="weight" name="weight" required>
 
-            <br><br>
+        <br><br>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <br><br>
-
-            <label for="healthInfo">Health Information:</label>
-            <textarea id="healthInfo" name="healthInfo" ></textarea>
-
-
-            <br><br>
-
-            <button type="submit">Add Patient</button>
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex" required>
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
 
 
-        </form>
+        <br><br>
 
-        <h2>Patient Records</h2>
 
-        <div id="patientList"></div>
+        <label for="mobile">Mobile:</label>
+        <input type="text" id="mobile" name="mobile" required>
 
-        <h2>Search Patient Record</h2>
+        <br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <br><br>
+
+        <label for="healthInfo">Health Information:</label>
+        <textarea id="healthInfo" name="healthInfo"></textarea>
+
+
+        <br><br>
+
+        <button type="submit">Add Patient</button>
+
+
+    </form>
+
+    <section class="patient-actions">
+
+        <!-- Search Patient Record -->
+        <div class="action-panel">
+
+            <h2>Search Patient Record</h2>
 
             <label for="searchId">Search by Patient ID:</label>
             <input type="text" id="searchId" name="searchId">
 
             <button type="button" id="searchButton">Search</button>
+
             <div id="searchResult"></div>
 
-        <h2>Delete Patient Record</h2>
+        </div>
 
-        <label for="deleteId">Delete Patient ID:</label>
-        <input type="text" id="deleteId" name="deleteId">
+        <!--Edit Patient Record-->
 
-        <button type="button" id="deleteButton">Delete</button> 
+        <div class="action-panel">
+            <h2>Edit Patient Record</h2>
 
-        <p id="deleteResult"></p>
+            <label for="editId">Edit Patient ID:</label>
+            <input type="text" id="editId" name="editId">
 
+            <button type="button" id="editButton">Edit Patient</button>
 
+            <p id="editResult"></p>
+
+        </div>
+
+        <!--Delete Patient Record-->
+
+        <div class="action-panel delete-panel">
+            <h2>Delete Patient Record</h2>
+
+            <label for="deleteId">Delete Patient ID:</label>
+            <input type="text" id="deleteId" name="deleteId">
+
+            <button type="button" id="deleteButton">Delete</button>
+
+            <p id="deleteResult"></p>
+
+        </div>
+
+        </section>
+
+        <!--Patient Records-->
+        <h2>Patient Records</h2>
+        <div id="patientList"></div>
 
 
         <script src="js/app.js"></script>
 </body>
-
-
 </html>
