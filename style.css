@@ -169,3 +169,32 @@ button:focus {
 .action-panel:nth-child(2) {
     border-top-color: #007f3b;
 }
+
+/* Patient record area */
+#patientList {
+    max-width: 1000px;
+    margin: 0 auto 40px auto;
+
+}
+
+/* Individual patient record */
+.patient-card {
+    background-color: #ffffff;
+    border-left: 5px solid #005eb8;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(38, 52, 61, 0.10);
+    line-height: 1,7;
+    color: #26343d;
+}
+
+/* Patient record heading */
+.patient-card h3 {
+    color: #003d78
+    margin-top 0;
+    margin-bottom: 10px;
+    font-size: 19px;
+    border-bottom: 1px solid #d8dfe3;
+    padding-bottom: 8px;
+}
