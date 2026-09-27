@@ -1,7 +1,31 @@
 console.log("Patient Record System loaded");
 
 const patientForm = document.getElementById("patientForm");
+const patientList = document.getElementById("patientList");
+const savedPatients = localStorage.getItem("patients");
 let patients = [];
+
+if (savedPatients) {
+    patients = JSON.parse(savedPatients);
+}
+
+console.log("Loaded patients:", patients);
+
+
+
+function displayPatients() {
+    patientList.innerHTML = "";
+    patients.forEach(function (patient) {
+
+        const patientParagraph = document.createElement("p");
+        patientParagraph.textContent = `Patient ID: ${patient.patientId}, Name: ${patient.firstName} ${patient.lastName}, DOB: ${patient.dateOfBirth}, Height: ${patient.height} cm, Weight: ${patient.weight} kg, Sex: ${patient.sex}, Mobile: ${patient.mobile}, Email: ${patient.email}, Health Info: ${patient.healthInfo}`;
+        patientList.appendChild(patientParagraph);
+   
+    });
+
+}
+
+displayPatients();
 
 patientForm.addEventListener("submit", function (event) {
   
@@ -18,6 +42,14 @@ patientForm.addEventListener("submit", function (event) {
     const email = document.getElementById("email").value;
     const healthInfo = document.getElementById("healthInfo").value;
 
+    const duplicateId = patients.some(function (patient) {
+        return patient.patientId === patientId;
+    });
+
+    if (duplicateId) {
+        alert("Patient ID already exists. Please use a unique Patient ID.");
+        return;
+    }   
 
     const patient = {
         patientId: patientId,
@@ -31,7 +63,13 @@ patientForm.addEventListener("submit", function (event) {
         email: email,
         healthInfo: healthInfo
     };
+
+
+    patients.push(patient);
+    localStorage.setItem("patients", JSON.stringify(patients));
+    displayPatients();
     console.log(patient);
     console.log("Add Patient Button clicked");
+    console.log("Patients:", patients);
 
 });
