@@ -2,6 +2,9 @@ console.log("Patient Record System loaded");
 
 const patientForm = document.getElementById("patientForm");
 const patientList = document.getElementById("patientList");
+const searchButton = document.getElementById("searchButton");
+const searchId = document.getElementById("searchId");
+const searchResult = document.getElementById("searchResult");
 const savedPatients = localStorage.getItem("patients");
 let patients = [];
 
@@ -148,5 +151,24 @@ displayPatients();
 console.log(patient);
 console.log("Add Patient Button clicked");
 console.log("Patients:", patients);
+
+});
+
+searchButton.addEventListener("click", function () {
+    const idToFind =searchId.value.trim();
+    const foundPatient = patients.find(function (patient) {
+        return patient.patientId === idToFind;
+    });
+
+
+    if (foundPatient) {
+        searchResult.textContent = `Patient ID: ${foundPatient.patientId}, Name: ${foundPatient.firstName} ${foundPatient.lastName}, Date of Birth: ${foundPatient.dateOfBirth}, Age: ${foundPatient.age}, Height: ${foundPatient.height} cm, Weight: ${foundPatient.weight} kg, BMI: ${foundPatient.bmi}, BMI Category: ${foundPatient.bmiCategory}, Sex: ${foundPatient.sex}, Mobile: ${foundPatient.mobile}, Email: ${foundPatient.email}, Health Info: ${foundPatient.healthInfo}`;
+
+    } else {
+        searchResult.textContent = "Patient not found.";
+    }
+
+    console.log("Searching for:", idToFind);
+    console.log("Found patient:", foundPatient);
 
 });
