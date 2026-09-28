@@ -12,78 +12,92 @@
 
 <body>
 
-    <h1>Patient Record System</h1>
+    <header class="system-header">
+        <div class="header-content">
+
+            <div>
+                <h1>Patient Record System</h1>
+                <p class="system-subtitle">Patient record management</p>
+            </div>
+
+        </div>
+    </header>
+
     <!-- Patient Form-->
+    <section class="patient-entry">
 
-    <h2>Add Patient Record</h2>
+        <div class="section-heading">
+            <h2>Add Patient Record</h2>
+            <p> Enter patient details below.</p>
+        </div>
 
-    <form id="patientForm">
+        <form id="patientForm">
 
-        <label for="patientId">Patient ID:</label>
-        <input type="text" id="patientId" name="patientId" required>
+            <div class="form-grid">
 
-        <br><br>
+                <div class="form-field">
+                    <label for="patientId">Patient ID</label>
+                    <input type="text" id="patientId" name="patientId" required>
+                </div>
 
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" required>
+                <div class="form-field">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
 
-        <br><br>
+                <div class="form-field">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
 
+                </div>
 
+                <div class="form-field">
+                    <label for="dateOfBirth">Date of Birth:</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
 
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required>
+                </div>
 
-        <br><br>
+                <div class="form-field">
+                    <label for="sex">Sex:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
 
-        <label for="dateOfBirth">Date of Birth:</label>
-        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                <div class="form-field">
+                    <label for="mobile">Mobile:</label>
+                    <input type="text" id="mobile" name="mobile" required>
+                </div>
 
-        <br><br>
+                <div class="form-field">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" name="height" required>
+                </div>
 
+                <div class="form-field">
+                    <label for="weight">Weight (kg) :</label>
+                    <input type="number" id="weight" name="weight" required>
+                </div>
+                <div class="form-field">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
 
-        <label for="height">Height (cm):</label>
-        <input type="number" id="height" name="height" required>
+                <div class="form-field form-field-wide">
+                    <label for="healthInfo">Health Information:</label>
+                    <textarea id="healthInfo" name="healthInfo"></textarea>
+                </div>
 
-        <br><br>
+            </div>
 
+            <div class="form-actions">
+                <button type="submit">Add Patient</button>
+            </div>
+        </form>
 
-        <label for="weight">Weight (kg) :</label>
-        <input type="number" id="weight" name="weight" required>
-
-        <br><br>
-
-        <label for="sex">Sex:</label>
-        <select id="sex" name="sex" required>
-            <option value="">Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-
-
-        <br><br>
-
-
-        <label for="mobile">Mobile:</label>
-        <input type="text" id="mobile" name="mobile" required>
-
-        <br><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <br><br>
-
-        <label for="healthInfo">Health Information:</label>
-        <textarea id="healthInfo" name="healthInfo"></textarea>
-
-
-        <br><br>
-
-        <button type="submit">Add Patient</button>
-
-
-    </form>
+    </section>
 
     <!--Patient Statistics-->
     <section class="statistics-section">
@@ -92,52 +106,49 @@
 
         <div class="statistics-grid">
 
-        <div class="stat-card">
-            <h3>Total Patients</h3>
-            <p id="totalPatients">0</p>
+            <div class="stat-card">
+                <h3>Total Patients</h3>
+                <p id="totalPatients">0</p>
 
+            </div>
+
+            <div class="stat-card">
+                <h3>Average BMI - Male</h3>
+                <p id="averageBmiMale">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Average BMI - Female</h3>
+                <p id="averageBmiFemale">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Female Patients Aged 50+</h3>
+                <p id="female50Plus">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Underweight</h3>
+                <p id="underweightCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Normal BMI</h3>
+                <p id="normalCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Overweight</h3>
+                <p id="overweightCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Obese</h3>
+                <p id="obeseCount">0</p>
+            </div>
         </div>
 
-        <div class="stat-card">
-            <h3>Average BMI - Male</h3>
-            <p id="averageBmiMale">0</p>
-        </div>
-
-        <div class="stat-card">
-            <h3>Average BMI - Female</h3>
-            <p id="averageBmiFemale">0</p>
-        
-        </div>
-
-    </div>
-
-    <div class="stat-card">
-    <h3>Female Patients Aged 50+</h3>
-    <p id="female50Plus">0</p>
-</div>
-
-<div class="stat-card">
-    <h3>Underweight</h3>
-    <p id="underweightCount">0</p>
-</div>
-
-<div class="stat-card">
-    <h3>Normal BMI</h3>
-    <p id="normalCount">0</p>
-</div>
-
-<div class="stat-card">
-    <h3>Overweight</h3>
-    <p id="overweightCount">0</p>
-</div>
-
-<div class="stat-card">
-    <h3>Obese</h3>
-    <p id="obeseCount">0</p>
-</div>
-
-
-</section>
+    </section>
 
     <section class="patient-actions">
 
@@ -185,23 +196,23 @@
 
     </section>
 
-     <!-- Patient Records -->
+    <!-- Patient Records -->
     <h2>Patient Records</h2>
 
     <!-- Filter BMI -->
 
-<label for="filterBmi">Filter by BMI:</label>
+    <label for="filterBmi">Filter by BMI:</label>
 
-<select id="filterBmi">
-    <option value="all">All BMI Categories</option>
-    <option value="Underweight">Underweight</option>
-    <option value="Normal">Normal</option>
-    <option value="Overweight">Overweight</option>
-    <option value="Obese">Obese</option>
-</select>
+    <select id="filterBmi">
+        <option value="all">All BMI Categories</option>
+        <option value="Underweight">Underweight</option>
+        <option value="Normal">Normal</option>
+        <option value="Overweight">Overweight</option>
+        <option value="Obese">Obese</option>
+    </select>
 
     <!-- Sort patient records -->
-     <div class="patient-controls">
+    <div class="patient-controls">
         <label for="sortPatients"> Sort patients:</label>
 
         <select id="sortPatients">
@@ -210,7 +221,7 @@
             <option value="surnameZA">Surname Z-A</option>
 
         </select>
-     </div>
+    </div>
 
     <div id="patientList"></div>
 

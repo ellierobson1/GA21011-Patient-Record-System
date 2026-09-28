@@ -55,6 +55,13 @@ function displayPatients() {
 
     }
 
+    // Display a message to the user when there are no records to show
+    if (patientsToDisplay.length === 0) {
+        patientList.textContent =
+        "No patient records to display. Add a new patient using the form.";
+        return;
+    }
+
     patientsToDisplay.forEach(function (patient) {
 
         // Create card for each patient record
@@ -448,6 +455,17 @@ deleteButton.addEventListener("click", function () {
 
     if (patientIndex === -1) {
         deleteResult.textContent = "Patient not found.";
+        return;
+    }
+
+    // Ask the user to confirm that they want to delete the patient
+
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this patient record?"
+    );
+
+    if (!confirmDelete) {
+        deleteResult.textContent = "Delete cancelled";
         return;
     }
 
