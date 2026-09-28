@@ -85,6 +85,60 @@
 
     </form>
 
+    <!--Patient Statistics-->
+    <section class="statistics-section">
+
+        <h2>Patient Statistics</h2>
+
+        <div class="statistics-grid">
+
+        <div class="stat-card">
+            <h3>Total Patients</h3>
+            <p id="totalPatients">0</p>
+
+        </div>
+
+        <div class="stat-card">
+            <h3>Average BMI - Male</h3>
+            <p id="averageBmiMale">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Average BMI - Female</h3>
+            <p id="averageBmiFemale">0</p>
+        
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+    <h3>Female Patients Aged 50+</h3>
+    <p id="female50Plus">0</p>
+</div>
+
+<div class="stat-card">
+    <h3>Underweight</h3>
+    <p id="underweightCount">0</p>
+</div>
+
+<div class="stat-card">
+    <h3>Normal BMI</h3>
+    <p id="normalCount">0</p>
+</div>
+
+<div class="stat-card">
+    <h3>Overweight</h3>
+    <p id="overweightCount">0</p>
+</div>
+
+<div class="stat-card">
+    <h3>Obese</h3>
+    <p id="obeseCount">0</p>
+</div>
+
+
+</section>
+
     <section class="patient-actions">
 
         <!-- Search Patient Record -->
@@ -129,13 +183,39 @@
 
         </div>
 
-        </section>
+    </section>
 
-        <!--Patient Records-->
-        <h2>Patient Records</h2>
-        <div id="patientList"></div>
+     <!-- Patient Records -->
+    <h2>Patient Records</h2>
+
+    <!-- Filter BMI -->
+
+<label for="filterBmi">Filter by BMI:</label>
+
+<select id="filterBmi">
+    <option value="all">All BMI Categories</option>
+    <option value="Underweight">Underweight</option>
+    <option value="Normal">Normal</option>
+    <option value="Overweight">Overweight</option>
+    <option value="Obese">Obese</option>
+</select>
+
+    <!-- Sort patient records -->
+     <div class="patient-controls">
+        <label for="sortPatients"> Sort patients:</label>
+
+        <select id="sortPatients">
+            <option value="">Default order</option>
+            <option value="surnameAZ">Surname A-Z</option>
+            <option value="surnameZA">Surname Z-A</option>
+
+        </select>
+     </div>
+
+    <div id="patientList"></div>
 
 
-        <script src="js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
