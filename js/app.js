@@ -58,7 +58,7 @@ function displayPatients() {
     // Display a message to the user when there are no records to show
     if (patientsToDisplay.length === 0) {
         patientList.textContent =
-        "No patient records to display. Add a new patient using the form.";
+            "No patient records to display. Add a new patient using the form.";
         return;
     }
 
@@ -79,17 +79,18 @@ function displayPatients() {
 
         // Create paragraph for patient details
 
-        const patientDetails = document.createElement("p");
+        const patientDetails = document.createElement("div");
+        patientDetails.classList.add("patient-details");
 
         patientDetails.innerHTML = `
-    <strong>Date of Birth:</strong> ${patient.dateOfBirth}<br>
-    <strong>Age:</strong> ${patient.age} years<br>
-    <strong>Sex:</strong> ${patient.sex}<br>
-    <strong>Height:</strong> ${patient.height} cm<br>
-    <strong>Weight:</strong> ${patient.weight} kg<br>
-    <strong>BMI:</strong> ${patient.bmi} (${patient.bmiCategory})
+    <p><strong>Date of Birth</strong><span>${patient.dateOfBirth}</span></p>
+    <p><strong>Age</strong><span>${patient.age ?? "Not recorded"}</span></p>
+    <p><strong>Sex</strong><span>${patient.sex}</span></p>
+    <p><strong>Height</strong><span>${patient.height} cm</span></p>
+    <p><strong>Weight</strong><span>${patient.weight} kg</span></p>
+    <p><strong>BMI:</strong> ${patient.bmi} (${patient.bmiCategory})
+    <p><strong>BMI</strong><span>${patient.bmi ?? "Not recorded"} ${patient.bmiCategory ? "(" + patient.bmiCategory + ")" : ""}</span></p>
 `;
-
         patientCard.appendChild(patientDetails);
 
 
@@ -150,7 +151,7 @@ sortPatients.addEventListener("change", function () {
 
 // Filter patient records when BMI category changes 
 filterBmi.addEventListener("change", function () {
-    displayPatients ();
+    displayPatients();
 
 });
 
@@ -161,7 +162,7 @@ function updateStatistics() {
 
     // Get all male patients
     const malePatients = patients.filter(function (patient) {
-        return patient.sex === "Male";
+        return patient.sex === "Male" && !isNaN(Number(patient.bmi));;
     });
 
     // Calculate the total BMI of all male patients
@@ -185,7 +186,7 @@ function updateStatistics() {
     // Get all female patients
 
     const femalePatients = patients.filter(function (patient) {
-        return patient.sex === "Female";
+        return patient.sex === "Female" && !isNaN(Number(patient.bmi));
     });
 
     // Calculatee the total BMI of all female patients
@@ -429,8 +430,16 @@ searchButton.addEventListener("click", function () {
 
 
     if (foundPatient) {
-        searchResult.textContent = `Patient ID: ${foundPatient.patientId}, Name: ${foundPatient.firstName} ${foundPatient.lastName}, Date of Birth: ${foundPatient.dateOfBirth}, Age: ${foundPatient.age}, Height: ${foundPatient.height} cm, Weight: ${foundPatient.weight} kg, BMI: ${foundPatient.bmi}, BMI Category: ${foundPatient.bmiCategory}, Sex: ${foundPatient.sex}, Mobile: ${foundPatient.mobile}, Email: ${foundPatient.email}, Health Info: ${foundPatient.healthInfo} `;
-
+        searchResult.innerHTML = `
+    <strong>Patient found:</strong><br>
+    ${foundPatient.firstName} ${foundPatient.lastName}<br>
+    Patient ID: ${foundPatient.patientId}<br>
+    Date of Birth: ${foundPatient.dateOfBirth}<br>
+    Sex: ${foundPatient.sex}<br>
+    BMI: ${foundPatient.bmi || "Not recorded"}<br>
+    Mobile: ${foundPatient.mobile}<br>
+    Email: ${foundPatient.email}
+`;
     } else {
         searchResult.textContent = "Patient not found.";
     }

@@ -1,6 +1,9 @@
+/* General page styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #e8edee;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f2f5f6;
+    color: #1f2d38;
     margin: 0;
     padding: 20px;
     border-top: 12px solid #005eb8;
@@ -22,34 +25,38 @@ h2 {
 /* Patient entrance */
 .patient-entry {
     max-width: 1000px;
-    margin: 0 auto 40px;
+    margin: 38px auto 40px;
 
 }
 
+/* Form element style */
 
 label {
     display: inline-block;
     width: 160px;
     font-weight: bold;
-    color: #26343d
+    color: #26343d;
 }
 
 input,
 select,
 textarea {
-    width: 60%;
-    padding: 10px;
-    border: 1px solid #aeb7bd;
-    border-radius: 4px;
-    font-size: 15px;
-    box-sizing: border-box;
+    border: 1px solid #b8c5cd;
+    border-radius: 2px;
+    background-color: #ffffff;
+    color: #26343d;
+    font-size: 14px;
+    transition: border-color 0.15s ease;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: #005eb8;
-    outline: 3px solid #ffdd00;
+    border-color: #1769aa;
+    outline: 2px solid #d7e8f5;
+    outline-offset: 0;
+
+
 }
 
 textarea {
@@ -60,12 +67,15 @@ textarea {
 button {
     padding: 10px 18px;
     border: none;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: bold;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.15s ease;
+
 }
 
+/* Main section heading */
 .section-heading {
     margin-bottom: 14px;
 }
@@ -73,21 +83,24 @@ button {
 .section-heading h2 {
     margin: 0 0 4px;
     color: #102a43;
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: 600;
 }
 
 .section-heading p {
     margin: 0;
-    color: #61717d;
+    color: #667784;
     font-size: 14px;
 }
+
+/* Patient form styling */
 
 #patientForm {
     max-width: none;
     margin: 0;
-    padding: 28px;
+    padding: 26px 32px 22px;
     background-color: #ffffff;
-    border: 1px solid #cbd5dc;
+    border: 1px solid #d1d1d1;
     border-radius: 0;
     box-shadow: none;
 }
@@ -95,7 +108,7 @@ button {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 22px 24px;
+    gap: 22px 28px;
 }
 
 .form-field {
@@ -108,13 +121,22 @@ button {
     width: auto;
     margin-bottom: 7px;
     font-size: 13px;
-    color: #344b5e;
+    font-weight: 600;
+    color: #344b5c;
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
     width: 100%;
+    border: 1px solid #b8c5cd;
+    border-radius: 3px;
+    background-color: #fbfcfc;
+    min-height: 44px;
+}
+
+.form-field textarea {
+    min-height: 75px;
 }
 
 .form-field-wide {
@@ -122,15 +144,16 @@ button {
 }
 
 .form-actions {
-    margin-top: 24px;
-    padding-top: 18px;
+    margin-top: 22px;
+    padding-top: 20px;
     border-top: 1px solid #d8dfe3;
     text-align: right;
 }
 
 #patientForm button {
     margin-left: 0;
-    min-width: 150px;
+    min-width: 120px;
+    padding: 10px 20px;
     background-color: #1769aa;
     color: #ffffff;
 }
@@ -140,20 +163,10 @@ button:focus {
     outline-offset: 2px;
 }
 
-/* Patient area, search, edit and delete*/
-.patient-actions {
-    max-width: 1000px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background-color: #ffffff;
-    border: 1px solid #cbd5dc;
-}
-
 /* Individual action panels*/
 .action-panel {
     background-color: #ffffff;
-    padding: 24px;
+    padding: 20px 24px;
     border-right: 1px solid #d8dfe3;
     border-radius: 0;
     box-shadow: none;
@@ -164,18 +177,28 @@ button:focus {
     border-right: none;
 }
 
+/* Patient area, search, edit and delete */
+.patient-actions {
+    max-width: 1000px;
+    margin: 0 auto 45px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: #ffffff;
+    border: 1px solid #d1dbe1;
+}
+
 /* Headings in action panels*/
 .action-panel h2 {
-    color: #102a43;
     font-size: 16px;
-    margin: 0 0 20px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #102a43;
+    margin: 0 0 18px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #d8dfe3;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-
-    
+    border-bottom: 1px solid #e0e6ea;
 }
+
 
 /* Labels inside action panels*/
 .action-panel label {
@@ -230,35 +253,62 @@ button:focus {
 /* Individual patient record */
 .patient-card {
     background-color: #ffffff;
-    border-left: 5px solid #005eb8;
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 6px rgba(38, 52, 61, 0.10);
-    line-height: 1.7;
+    border: 1px solid #c5d0d7;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: none;
     color: #26343d;
+}
+
+
+.patient-card>p {
+
+    padding: 18px 22px;
+    margin: 0;
+    line-height: 1.8;
+}
+
+.patient-contact,
+.patient-health {
+    padding: 18px 26px;
+    border-top: 1px solid #e1e6e9;
+    line-height: 1.6;
+}
+
+.patient-contact h4,
+.patient-health h4 {
+    margin: 0 0 8px;
+    color: #102a43;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.patient-health p {
+    margin: 0;
 }
 
 /* Patient record heading */
 .patient-card h3 {
-    color: #003d78;
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 19px;
+    margin: 0;
+    padding: 16px 22px;
+    background-color: #f5f7f8;
     border-bottom: 1px solid #d8dfe3;
-    padding-bottom: 8px;
+    color: #102a43;
+    font-size: 17px;
+    font-weight: 600;
 }
 
 /* Main application header */
 .system-header {
     background-color: #102a43;
     margin: -20px -20px 35px -20px;
-    padding: 28px 40px;
-    border-bottom: 4px solid #2f80c9;
+    padding: 22px 40px;
+    border-bottom: 3px solid #2f80c9;
 }
 
 .header-content {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -268,86 +318,143 @@ button:focus {
 .system-header h1 {
     color: #ffffff;
     text-align: left;
-    margin: 3px 0 6px;
-    font-size: 30px;
-}
-
-.system-label {
-    margin: 0;
-    color: #9fc5e8;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.system-subtitle {
-    margin: 0;
-    color: #d5e3ef;
-    font-size: 14px;
-}
-
-.system-status {
-    color: #d5e3ef;
-    font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.status-dot {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    background-color: #4caf78;
-    border-radius: 50%;
-    margin-right: 7px;
+    margin: 0 0 5px;
+    font-size: 28px;
+    font-weight: 600;
 }
 
 /* Patient stats summary */
 
 .statistics-section {
-    max-width: 1100px;
-    margin: 35px auto;
+    max-width: 1000px;
+    margin: 42px auto;
 }
 
-.statistics-section > h2 {
-    color: #102a43;
-    font-size: 18px;
-    margin-bottom: 12px;
-}
 
 .statistics-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    background-color: #102a43;
-    border: 1px solid #102a43;
+    background-color: #ffffff;
+    border: 1px solid #c5d0d7;
 }
 
 /* Individual statistic */
 
 .stat-card {
-    background-color: transparent;
-    padding: 22px 20px;
+    background-color: #ffffff;
+    padding: 22px 28px;
     text-align: left;
-    border-right: 1px solid #395269;
-    border-radius: 0;
+    border-right: 1px solid #d8e0e5;
+    border-bottom: 1px solid #d8e0e5;
 }
 
 .stat-card:last-child {
     border-right: none;
 }
 
+.stat-card:nth-child(4n) {
+    border-right: none;
+}
+
+.stat-card:nth-child(n+5) {
+    border-bottom: none;
+}
+
 .stat-card h3 {
-    color: #b8cad8;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 0 0 10px;
+    color: #526575;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 12px;
 }
 
 .stat-card p {
-    color: #ffffff;
-    font-size: 28px;
-    font-weight: bold;
+    color: #102a43;
+    font-size: 30px;
+    font-weight: 600;
     margin: 0;
+}
+
+/* Patient records section */
+.records-section {
+    max-width: 1000px;
+    margin: 45px auto 60px;
+}
+
+.records-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #102a43;
+}
+
+/* Filter and sort controls */
+.patient-controls {
+    display: flex;
+    gap: 14px;
+}
+
+.control-group label {
+    width: auto;
+    margin-bottom: 6px;
+    color: #344b5e;
+    font-size: 13px;
+    font-weight: 600;
+
+
+}
+
+.control-group select {
+    width: 180px;
+    min-height: 38px;
+    padding: 6px 8px;
+    background-color: #ffffff;
+    border: 1px solid #b8c5cd;
+    border-radius: 2px;
+}
+
+/* Patient record details */
+.patient-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 20px 26px;
+    border-bottom: 1px solid #e1e6e9;
+}
+
+.patient-details p {
+    margin: 0;
+    padding: 10px 20px 10px 0;
+
+}
+
+.patient-details strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #526575;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.patient-details span {
+    color: #1f2d38;
+    font-size: 15px;
+}
+
+/* Search, edit and delete messages */
+#searchResult,
+#editResult,
+#deleteResult {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #526575;
+}
+
+#searchResult:not(:empty),
+#editResult:not(:empty),
+#deleteResult:not(:empty) {
+    padding-top: 12px;
+    border-top: 1px solid #e1e6e9;
 }
