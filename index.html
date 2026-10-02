@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicongp.png" type="image/png">
 
     <title>Patient Record System</title>
 
@@ -17,7 +18,11 @@
     <header class="system-header">
         <div class="header-content">
 
-            <div>
+            <div class="header-title">
+                <a href="index.html" class="logo-link" aria-label="Go to home">
+                    <img src="assets/images/favicongp.png" alt="Patient Record System logo" class="site-logo">
+                </a>
+
                 <h1>Patient Record System</h1>
             </div>
 
@@ -29,7 +34,7 @@
 
         <div class="section-heading">
             <h2>Add Patient Record</h2>
-            <p> Enter patient details below.</p>
+            <p> To add a new patient to the system, please add their details below.</p>
         </div>
 
         <!-- Patient input fields -->
@@ -97,8 +102,9 @@
 
             <!-- Submit patient record  -->
 
-            <div class="form-actions">
-                <button type="submit">Add Patient</button>
+            <div class="form-submit-area">
+                <p id="formMessage"> </p>
+                <button type="submit" id="submitButton">Add Patient</button>
             </div>
         </form>
 
@@ -170,44 +176,23 @@
 
     <section class="patient-actions">
 
-        <!-- Search Patient Record -->
         <div class="action-panel">
 
-            <h2>Search Patient Record</h2>
+            <h2>Find Patient Record</h2>
+            <div class="patient-search-row">
 
-            <label for="searchId">Patient ID:</label>
-            <input type="text" id="searchId" name="searchId">
+                <label for="manageId">Patient ID:</label>
+                <input type="text" id="manageId" name="manageId">
 
-            <button type="button" id="searchButton">Search</button>
+                <div class="action-buttons">
+                    <button type="button" id="searchButton">Search</button>
+                    <button type="button" id="editButton">Edit</button>
+                    <button type="button" id="deleteButton">Delete</button>
+                </div>
+            </div>
 
             <div id="searchResult"></div>
-
-        </div>
-
-        <!-- Edit Patient Record -->
-
-        <div class="action-panel">
-            <h2>Edit Patient Record</h2>
-
-            <label for="editId">Patient ID:</label>
-            <input type="text" id="editId" name="editId">
-
-            <button type="button" id="editButton">Edit</button>
-
             <p id="editResult"></p>
-
-        </div>
-
-        <!--Delete Patient Record-->
-
-        <div class="action-panel delete-panel">
-            <h2>Delete Patient Record</h2>
-
-            <label for="deleteId">Patient ID:</label>
-            <input type="text" id="deleteId" name="deleteId">
-
-            <button type="button" id="deleteButton">Delete</button>
-
             <p id="deleteResult"></p>
 
         </div>
@@ -260,6 +245,11 @@
         <div id="patientList"></div>
 
     </section>
+
+    <footer class="system-footer">
+        <p>&copy; 2026 Patient Record System. 
+        Designed and developed by Ellie.</p>
+    </footer>
 
     <!-- Link to JavaScript file -->
     <script src="js/app.js"></script>

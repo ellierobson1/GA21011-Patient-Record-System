@@ -3,16 +3,16 @@ console.log("Patient Record System loaded");
 // Get references to the HTML elements used by patient record system
 
 const patientForm = document.getElementById("patientForm");
+const submitButton = document.getElementById("submitButton");
+const formMessage = document.getElementById("formMessage");
 const patientList = document.getElementById("patientList");
 const searchButton = document.getElementById("searchButton");
-const searchId = document.getElementById("searchId");
 const searchResult = document.getElementById("searchResult");
 const savedPatients = localStorage.getItem("patients");
 const deleteButton = document.getElementById("deleteButton");
-const deleteId = document.getElementById("deleteId");
 const deleteResult = document.getElementById("deleteResult");
 const editButton = document.getElementById("editButton");
-const editId = document.getElementById("editId");
+const manageId = document.getElementById("manageId");
 const editResult = document.getElementById("editResult");
 const totalPatients = document.getElementById("totalPatients");
 const averageBmiMale = document.getElementById("averageBmiMale");
@@ -29,6 +29,7 @@ const filterBmi = document.getElementById("filterBmi");
 // Store patients in an array and track whether a patient is being edited
 let patients = [];
 let editingPatientId = null;
+submitButton.textContent = "Add Patient";
 
 // Load patients from Local Storage if available, convert JSON string back to an array of objects, and assign it to the patients variable
 
@@ -38,7 +39,7 @@ if (savedPatients) {
 
 console.log("Loaded patients:", patients);
 
-// Function to display patients in the patient array
+// Display patient records on the page
 
 function displayPatients() {
     patientList.innerHTML = "";
@@ -71,8 +72,8 @@ function displayPatients() {
         // Create heading for patient record
         const patientHeader = document.createElement("h3");
 
-        patientHeader.textContent =
-            `${patient.firstName} ${patient.lastName} - Patient ID: ${patient.patientId}`;
+        patientHeader.innerHTML =
+    `${patient.firstName} ${patient.lastName} <span class="patient-id">| Patient ID: ${patient.patientId}</span>`;
 
         patientCard.appendChild(patientHeader);
 
@@ -88,7 +89,7 @@ function displayPatients() {
     <p><strong>Sex</strong><span>${patient.sex}</span></p>
     <p><strong>Height</strong><span>${patient.height} cm</span></p>
     <p><strong>Weight</strong><span>${patient.weight} kg</span></p>
-    <p><strong>BMI:</strong> ${patient.bmi} (${patient.bmiCategory})
+
     <p><strong>BMI</strong><span>${patient.bmi ?? "Not recorded"} ${patient.bmiCategory ? "(" + patient.bmiCategory + ")" : ""}</span></p>
 `;
         patientCard.appendChild(patientDetails);
@@ -162,7 +163,7 @@ function updateStatistics() {
 
     // Get all male patients
     const malePatients = patients.filter(function (patient) {
-        return patient.sex === "Male" && !isNaN(Number(patient.bmi));;
+        return patient.sex === "Male" && !isNaN(Number(patient.bmi));
     });
 
     // Calculate the total BMI of all male patients
@@ -189,7 +190,7 @@ function updateStatistics() {
         return patient.sex === "Female" && !isNaN(Number(patient.bmi));
     });
 
-    // Calculatee the total BMI of all female patients
+    // Calculate the total BMI of all female patients
     let totalFemaleBmi = 0;
 
     femalePatients.forEach(function (patient) {
@@ -253,7 +254,7 @@ patientForm.addEventListener("submit", function (event) {
     const firstName = document.getElementById("firstName").value;
     const lastName = document.getElementById("lastName").value;
     const dateOfBirth = document.getElementById("dateOfBirth").value;
-    //Convert height and weight values from string to number for calculations
+    // Convert height and weight values from string to number for calculations
 
     const height = Number(document.getElementById("height").value);
     const weight = Number(document.getElementById("weight").value);
@@ -262,8 +263,7 @@ patientForm.addEventListener("submit", function (event) {
     const email = document.getElementById("email").value;
     const healthInfo = document.getElementById("healthInfo").value;
 
-    //--------------VALIDATE PATIENT DETAILS-----------------
-
+    // Validate patient details 
     // Check that the patient ID is unique, before adding or updating
 
     const duplicateId = patients.some(function (patient) {
@@ -285,9 +285,9 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    const namePattern = /^[A-Za-z'-]+$/;
+    const namePattern = /^[A-Za-z '-]+$/;
     if (!namePattern.test(firstName) || !namePattern.test(lastName)) {
-        alert("First Name and Last Name can only contain letters, apostrophes and hyphens.");
+        alert("First Name and Last Name can only contain letters, apostrophes, spaces and hyphens.");
         return;
     }
     if (height < 30 || height > 200) {
@@ -311,7 +311,7 @@ patientForm.addEventListener("submit", function (event) {
     const dob = new Date(dateOfBirth);
     const today = new Date();
 
-    //Prevent future dates for date of birth and check that age is between 0 and 120 years
+    // Prevent future dates for date of birth and check that age is between 0 and 120 years
 
     if (dob > today) {
         alert("Date of Birth cannot be in the future.");
@@ -392,16 +392,17 @@ patientForm.addEventListener("submit", function (event) {
         patients[patientIndex] = patient;
 
         editingPatientId = null;
+        submitButton.textContent = "Add Patient";
+        formMessage.textContent = "Patient details updated successfully.";
 
-        editResult.textContent = "Patient details updated successfully.";
-        editId.value = "";
+        manageId.value = "";
     } else {
 
         patients.push(patient);
 
     }
 
-    // Save the updated patient array to Local Storage
+    // Save patient records to Local Storage
 
     localStorage.setItem("patients", JSON.stringify(patients));
 
@@ -418,14 +419,14 @@ patientForm.addEventListener("submit", function (event) {
 
 });
 
-//---------------SEARCH PATIENT------------------
+//Search for patient by patient ID
 
 searchButton.addEventListener("click", function () {
-    const idToFind = searchId.value.trim();
+    const idToFind = manageId.value.trim();
 
     // Find a patient whose patientId matches the input value
     const foundPatient = patients.find(function (patient) {
-        return patient.patientId === idToFind;
+        return patient.patientId === idToFind.toLowerCase();
     });
 
 
@@ -449,16 +450,16 @@ searchButton.addEventListener("click", function () {
 
 });
 
-//---------------DELETE PATIENT------------------
+//Delete patient record by patient ID
 
 deleteButton.addEventListener("click", function () {
-    const idToDelete = deleteId.value.trim();
+    const idToDelete = manageId.value.trim();
     console.log("Patient ID to delete:", idToDelete);
 
     // Find the array position of the patient that should be deleted
 
     const patientIndex = patients.findIndex(function (patient) {
-        return patient.patientId === idToDelete;
+        return patient.patientId === idToDelete.toLowerCase();
 
     });
 
@@ -489,13 +490,13 @@ deleteButton.addEventListener("click", function () {
 
 });
 
-//---------------EDIT PATIENT------------------
+//Edit an existing patient record by patient ID
 
 editButton.addEventListener("click", function () {
-    const idToEdit = editId.value.trim();
+    const idToEdit = manageId.value.trim();
 
     const foundPatient = patients.find(function (patient) {
-        return patient.patientId === idToEdit;
+        return patient.patientId === idToEdit.toLowerCase();
     });
 
     if (!foundPatient) {
@@ -506,6 +507,7 @@ editButton.addEventListener("click", function () {
 
     // Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
     editingPatientId = foundPatient.patientId;
+    submitButton.textContent = "Update Patient";
 
     // Populate the form fields with the found patient's details for editing
 
@@ -521,4 +523,10 @@ editButton.addEventListener("click", function () {
     document.getElementById("healthInfo").value = foundPatient.healthInfo;
 
     editResult.textContent = "Patient found. You can now edit the details in the form above.";
+});
+
+
+//Clears the form fields and gets rid of patient details updated message
+patientForm.addEventListener("input", function () {
+    formMessage.textContent = "";
 });

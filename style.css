@@ -23,10 +23,24 @@ h2 {
 }
 
 /* Patient entrance */
+
 .patient-entry {
     max-width: 1000px;
     margin: 38px auto 40px;
 
+}
+
+.patient-search-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.patient-search-row label {
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+   
 }
 
 /* Form element style */
@@ -85,6 +99,8 @@ button {
     color: #102a43;
     font-size: 22px;
     font-weight: 600;
+    padding-left: 12px;
+    border-left: 3px solid #2f80c9;
 }
 
 .section-heading p {
@@ -158,16 +174,36 @@ button {
     color: #ffffff;
 }
 
+#patientForm button:hover {
+    background-color: #0f568e;
+}
+
 button:focus {
     outline: 3px solid #ffdd00;
     outline-offset: 2px;
+}
+
+.form-submit-area {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+
+}
+
+#formMessage {
+    margin: 0;
+    color: #007f3b;
+    font-size: 14px;
+    font-weight: 600;
+ 
 }
 
 /* Individual action panels*/
 .action-panel {
     background-color: #ffffff;
     padding: 20px 24px;
-    border-right: 1px solid #d8dfe3;
     border-radius: 0;
     box-shadow: none;
 
@@ -180,23 +216,28 @@ button:focus {
 /* Patient area, search, edit and delete */
 .patient-actions {
     max-width: 1000px;
-    margin: 0 auto 45px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    margin: 0 auto 35px;
     background-color: #ffffff;
     border: 1px solid #d1dbe1;
+
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 0;
 }
 
 /* Headings in action panels*/
 .action-panel h2 {
     font-size: 16px;
     font-weight: 600;
-    text-transform: none;
-    letter-spacing: 0;
     color: #102a43;
     margin: 0 0 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e0e6ea;
+    padding: 10px 12px;
+    background-color: #f5f7f8;
+    border-left: 3px solid #2f80c9;
+
 }
 
 
@@ -209,8 +250,9 @@ button:focus {
 
 /*Inputs inside action panels*/
 .action-panel input {
-    width: 100%;
-    margin-bottom: 15px;
+    width: 340px;
+    min-height: 42px;
+    margin: 0;
 }
 
 /* Search button */
@@ -271,16 +313,16 @@ button:focus {
 
 .patient-contact,
 .patient-health {
-    padding: 18px 26px;
+    padding: 14px 22px;
     border-top: 1px solid #e1e6e9;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .patient-contact h4,
 .patient-health h4 {
-    margin: 0 0 8px;
-    color: #102a43;
-    font-size: 14px;
+    margin: 0 0 6px;
+    color: #526575;
+    font-size: 13px;
     font-weight: 600;
 }
 
@@ -292,8 +334,9 @@ button:focus {
 .patient-card h3 {
     margin: 0;
     padding: 16px 22px;
-    background-color: #f5f7f8;
+    background-color: #eef2f6;
     border-bottom: 1px solid #d8dfe3;
+    border-left: 3px solid #2f80c9;
     color: #102a43;
     font-size: 17px;
     font-weight: 600;
@@ -323,11 +366,29 @@ button:focus {
     font-weight: 600;
 }
 
+.site-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-link {
+    display: block;
+
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 /* Patient stats summary */
 
 .statistics-section {
     max-width: 1000px;
-    margin: 42px auto;
+    margin: 35px auto;
 }
 
 
@@ -342,10 +403,11 @@ button:focus {
 
 .stat-card {
     background-color: #ffffff;
-    padding: 22px 28px;
+    padding: 20px 28px;
     text-align: left;
     border-right: 1px solid #d8e0e5;
     border-bottom: 1px solid #d8e0e5;
+    border-left: none;
 }
 
 .stat-card:last-child {
@@ -357,27 +419,32 @@ button:focus {
 }
 
 .stat-card:nth-child(n+5) {
-    border-bottom: none;
+    background-color: #f8fafb;
+}
+
+.stat-card:nth-child(-n+4) {
+    border-top: 3px solid #2f80c9;
 }
 
 .stat-card h3 {
     color: #526575;
     font-size: 13px;
     font-weight: 600;
-    margin: 0 0 12px;
+    margin: 0 0 8px;
 }
 
 .stat-card p {
     color: #102a43;
     font-size: 30px;
-    font-weight: 600;
+    font-weight: 650;
     margin: 0;
+    line-height: 1.2;
 }
 
 /* Patient records section */
 .records-section {
     max-width: 1000px;
-    margin: 45px auto 60px;
+    margin: 35px auto 60px;
 }
 
 .records-header {
@@ -419,13 +486,14 @@ button:focus {
 .patient-details {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    padding: 20px 26px;
+    padding: 16px 22px;
+    gap: 8px 20px;
     border-bottom: 1px solid #e1e6e9;
 }
 
 .patient-details p {
     margin: 0;
-    padding: 10px 20px 10px 0;
+    padding: 8px 0;
 
 }
 
@@ -458,3 +526,19 @@ button:focus {
     padding-top: 12px;
     border-top: 1px solid #e1e6e9;
 }
+
+.system-footer {
+    background-color: #102a43;
+    margin: 60px -20px -20px -20px;
+    padding: 22px 40px;
+    border-top: 3px solid #2f80c9;
+    color: #ffffff;     
+}
+   
+    .system-footer p {
+        max-width: 1000px;
+        margin: 0 auto;
+        color: #ffffff;
+        font-size: 13px;
+    }
+
