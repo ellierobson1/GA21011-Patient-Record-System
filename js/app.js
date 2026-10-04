@@ -405,7 +405,7 @@ document.getElementById("patientId").disabled = false;
         manageId.value = "";
     } else {
 
-        patients.push(patient);
+        patients.unshift(patient);
         formMessage.textContent = "Patient added successfully.";
 
     }
@@ -430,6 +430,10 @@ document.getElementById("patientId").disabled = false;
 //Search for patient by patient ID
 
 searchButton.addEventListener("click", function () {
+    editResult.textContent = "";
+    deleteResult.textContent = "";
+    
+    
     const idToFind = manageId.value.trim();
 
     // Find a patient whose patientId matches the input value
@@ -445,7 +449,9 @@ searchButton.addEventListener("click", function () {
     Patient ID: ${foundPatient.patientId}<br>
     Date of Birth: ${foundPatient.dateOfBirth}<br>
     Sex: ${foundPatient.sex}<br>
+    Age: ${foundPatient.age || "Not recorded"}<br>
     BMI: ${foundPatient.bmi || "Not recorded"}<br>
+   BMI Category: ${foundPatient.bmiCategory || "Not recorded"}<br>
     Mobile: ${foundPatient.mobile}<br>
     Email: ${foundPatient.email}
 `;
@@ -461,6 +467,10 @@ searchButton.addEventListener("click", function () {
 //Delete patient record by patient ID
 
 deleteButton.addEventListener("click", function () {
+    searchResult.textContent = "";
+    editResult.textContent = "";
+    
+    
     const idToDelete = manageId.value.trim();
     console.log("Patient ID to delete:", idToDelete);
 
@@ -501,6 +511,11 @@ deleteButton.addEventListener("click", function () {
 //Edit an existing patient record by patient ID
 
 editButton.addEventListener("click", function () {
+  searchResult.textContent = "";
+  deleteResult.textContent = "";
+  
+  
+  
     const idToEdit = manageId.value.trim();
 
    const foundPatient = patients.find(function (patient) {
