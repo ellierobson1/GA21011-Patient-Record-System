@@ -267,7 +267,7 @@ patientForm.addEventListener("submit", function (event) {
     // Check that the patient ID is unique, before adding or updating
 
     const duplicateId = patients.some(function (patient) {
-        return patient.patientId === patientId &&
+        return patient.patientId.toLowerCase() === patientId.toLowerCase() &&
             patient.patientId !== editingPatientId;
     });
 
@@ -426,7 +426,7 @@ searchButton.addEventListener("click", function () {
 
     // Find a patient whose patientId matches the input value
     const foundPatient = patients.find(function (patient) {
-        return patient.patientId === idToFind.toLowerCase();
+       return patient.patientId.toLowerCase() === idToFind.toLowerCase();
     });
 
 
@@ -459,7 +459,7 @@ deleteButton.addEventListener("click", function () {
     // Find the array position of the patient that should be deleted
 
     const patientIndex = patients.findIndex(function (patient) {
-        return patient.patientId === idToDelete.toLowerCase();
+        return patient.patientId.toLowerCase() === idToDelete.toLowerCase();
 
     });
 
@@ -495,9 +495,9 @@ deleteButton.addEventListener("click", function () {
 editButton.addEventListener("click", function () {
     const idToEdit = manageId.value.trim();
 
-    const foundPatient = patients.find(function (patient) {
-        return patient.patientId === idToEdit.toLowerCase();
-    });
+   const foundPatient = patients.find(function (patient) {
+    return patient.patientId.toLowerCase() === idToEdit.toLowerCase();
+});
 
     if (!foundPatient) {
         editResult.textContent = "Patient not found";
@@ -524,7 +524,6 @@ editButton.addEventListener("click", function () {
 
     editResult.textContent = "Patient found. You can now edit the details in the form above.";
 });
-
 
 //Clears the form fields and gets rid of patient details updated message
 patientForm.addEventListener("input", function () {
