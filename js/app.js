@@ -394,11 +394,12 @@ patientForm.addEventListener("submit", function (event) {
         editingPatientId = null;
         submitButton.textContent = "Add Patient";
         formMessage.textContent = "Patient details updated successfully.";
-
+document.getElementById("patientId").disabled = false;
         manageId.value = "";
     } else {
 
         patients.push(patient);
+        formMessage.textContent = "Patient added successfully.";
 
     }
 
@@ -521,7 +522,7 @@ editButton.addEventListener("click", function () {
     document.getElementById("mobile").value = foundPatient.mobile;
     document.getElementById("email").value = foundPatient.email;
     document.getElementById("healthInfo").value = foundPatient.healthInfo;
-
+document.getElementById("patientId").disabled = true;
     editResult.textContent = "Patient found. You can now edit the details in the form above.";
 });
 
