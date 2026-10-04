@@ -58,8 +58,15 @@ function displayPatients() {
 
     // Display a message to the user when there are no records to show
     if (patientsToDisplay.length === 0) {
-        patientList.textContent =
-            "No patient records to display. Add a new patient using the form.";
+     
+
+        if(patients.length === 0) {
+            patientList.textContent =
+                "No patient records available. Please add a patient record.";
+        } else {
+            patientList.textContent =
+                "No patient records match the selected BMI category.";
+        }
         return;
     }
 
