@@ -31,7 +31,8 @@ let patients = [];
 let editingPatientId = null;
 submitButton.textContent = "Add Patient";
 
-// Load patients from Local Storage if available, convert JSON string back to an array of objects, and assign it to the patients variable
+// Load patients from Local Storage if available, convert JSON string
+//  back to an array of objects, and assign it to the patients variable
 
 if (savedPatients) {
     patients = JSON.parse(savedPatients);
