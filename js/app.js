@@ -450,14 +450,18 @@ searchButton.addEventListener("click", function () {
     Patient ID: ${foundPatient.patientId}<br>
     Date of Birth: ${foundPatient.dateOfBirth}<br>
     Sex: ${foundPatient.sex}<br>
-    Age: ${foundPatient.age || "Not recorded"}<br>
+    Age: ${foundPatient.age ?? "Not recorded"}<br>
     BMI: ${foundPatient.bmi || "Not recorded"}<br>
    BMI Category: ${foundPatient.bmiCategory || "Not recorded"}<br>
     Mobile: ${foundPatient.mobile}<br>
     Email: ${foundPatient.email}
 `;
     } else {
-        searchResult.textContent = "Patient not found.";
+        if (idToFind === "") {
+            searchResult.textContent = "Please enter a Patient ID to search.";
+        } else {
+            searchResult.textContent = "Patient not found.";
+        }
     }
 
     console.log("Searching for:", idToFind);
