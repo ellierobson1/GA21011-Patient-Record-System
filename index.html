@@ -28,8 +28,106 @@
         </div>
     </header>
 
-    <!-- Patient Form -->
-    <section class="patient-entry">
+    <!-- Main navigation -->
+<nav class="main-navigation" aria-label="Main navigation">
+    <a href="#statistics">Dashboard</a>
+    <a href="#add-patient">Add Patient</a>
+    <a href="#manage-patients">Manage Patients</a>
+    <a href="#patient-records">Patient Records</a>
+</nav>
+
+
+    <!-- Patient Statistics -->
+
+    <section class="statistics-section" id="statistics">
+
+        <div class="section-heading">
+            <h2>Patient Statistics</h2>
+            <p> Summary of patient information.</p>
+        </div>
+
+        <!-- Displays patient statistics -->
+
+        <div class="statistics-grid">
+
+            <div class="stat-card">
+                <h3>Total Patients</h3>
+                <p id="totalPatients">0</p>
+
+            </div>
+
+            <div class="stat-card">
+                <h3>Average BMI - Male</h3>
+                <p id="averageBmiMale">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Average BMI - Female</h3>
+                <p id="averageBmiFemale">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Female Patients Aged 50+</h3>
+                <p id="female50Plus">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>BMI: Underweight</h3>
+                <p id="underweightCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>BMI: Normal</h3>
+                <p id="normalCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>BMI: Overweight</h3>
+                <p id="overweightCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>BMI: Obese</h3>
+                <p id="obeseCount">0</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- Patient record management -->
+
+    <div class="section-heading patient-entry">
+        <h2>Manage Patient Records</h2>
+        <p>Search, edit or delete an existing patient record.</p>
+    </div>
+
+    <section class="patient-actions" id="manage-patients">
+
+        <div class="action-panel">
+
+            <h2>Find Patient Record</h2>
+            <div class="patient-search-row">
+
+                <label for="manageId">Patient ID:</label>
+                <input type="text" id="manageId" name="manageId">
+
+                <div class="action-buttons">
+                    <button type="button" id="searchButton">Search</button>
+                    <button type="button" id="editButton">Edit</button>
+                    <button type="button" id="deleteButton">Delete</button>
+                </div>
+            </div>
+
+            <div id="searchResult"></div>
+            <p id="editResult"></p>
+            <p id="deleteResult"></p>
+
+        </div>
+
+    </section>
+<!-- Patient Form -->
+    <section class="patient-entry" id="add-patient">
 
         <div class="section-heading">
             <h2 id="formHeading"> Add Patient Record</h2>
@@ -39,11 +137,12 @@
         <!-- Patient input fields -->
 
         <form id="patientForm">
+            <p class="required-note">* Required fields</p>
 
             <div class="form-grid">
 
                 <div class="form-field">
-                    <label for="patientId">Patient ID:</label>
+                    <label for="patientId">Patient ID: <span class="required">*</span></label>
                     <input type="text" id="patientId" name="patientId" required>
                 </div>
 
@@ -102,105 +201,15 @@
             <!-- Submit patient record  -->
 
             <div class="form-submit-area">
-                <p id="formMessage"> </p>
+                <p id="formMessage"></p>
                 <button type="submit" id="submitButton">Add Patient</button>
                 <button type="button" id="clearButton">Clear Form</button>
                 <button type="button" id="cancelEditButton" hidden>Cancel Edit</button>
             </div>
         </form>
 
-    </section>
-
-    <!-- Patient Statistics -->
-
-    <section class="statistics-section">
-
-        <div class="section-heading">
-            <h2>Patient Statistics</h2>
-            <p> Summary of patient information.</p>
-        </div>
-
-        <!-- Displays patient statistics -->
-
-        <div class="statistics-grid">
-
-            <div class="stat-card">
-                <h3>Total Patients</h3>
-                <p id="totalPatients">0</p>
-
-            </div>
-
-            <div class="stat-card">
-                <h3>Average BMI - Male</h3>
-                <p id="averageBmiMale">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Average BMI - Female</h3>
-                <p id="averageBmiFemale">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Female Patients Aged 50+</h3>
-                <p id="female50Plus">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Underweight</h3>
-                <p id="underweightCount">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Normal BMI</h3>
-                <p id="normalCount">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Overweight</h3>
-                <p id="overweightCount">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Obese</h3>
-                <p id="obeseCount">0</p>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- Patient record management -->
-
-    <div class="section-heading patient-entry">
-        <h2>Manage Patient Records</h2>
-        <p>Search, edit or delete an existing patient record.</p>
-    </div>
-
-    <section class="patient-actions">
-
-        <div class="action-panel">
-
-            <h2>Find Patient Record</h2>
-            <div class="patient-search-row">
-
-                <label for="manageId">Patient ID:</label>
-                <input type="text" id="manageId" name="manageId">
-
-                <div class="action-buttons">
-                    <button type="button" id="searchButton">Search</button>
-                    <button type="button" id="editButton">Edit</button>
-                    <button type="button" id="deleteButton">Delete</button>
-                </div>
-            </div>
-
-            <div id="searchResult"></div>
-            <p id="editResult"></p>
-            <p id="deleteResult"></p>
-
-        </div>
-
-    </section>
     <!-- Patient Records -->
-    <section class="records-section">
+    <section class="records-section" id="patient-records">
 
         <div class="records-header">
 
@@ -258,6 +267,8 @@
 
         <!--- Patient records displayed using JavaScript -->
         <div id="patientList"></div>
+
+    </section>
 
     </section>
 

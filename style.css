@@ -95,22 +95,24 @@ button {
 
 /* Main section heading */
 .section-heading {
-    margin-bottom: 14px;
+    margin-bottom: 22px;
 }
 
 .section-heading h2 {
     margin: 0 0 4px;
-    color: #102a43;
-    font-size: 22px;
-    font-weight: 600;
+    color: #102d47;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
     padding-left: 12px;
     border-left: 3px solid #2f80c9;
 }
 
 .section-heading p {
     margin: 0;
-    color: #667784;
+    color: #60788d;
     font-size: 14px;
+    margin-top: 6px;
 }
 
 /* Patient form styling */
@@ -122,7 +124,7 @@ button {
     background-color: #ffffff;
     border: 1px solid #d1d1d1;
     border-radius: 0;
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .form-grid {
@@ -209,12 +211,7 @@ button:focus {
     background-color: #ffffff;
     padding: 20px 24px;
     border-radius: 0;
-    box-shadow: none;
-
-}
-
-.action-panel:last-child {
-    border-right: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* Patient area, search, edit and delete */
@@ -223,6 +220,7 @@ button:focus {
     margin: 0 auto 35px;
     background-color: #ffffff;
     border: 1px solid #d1dbe1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
 }
 
@@ -300,10 +298,10 @@ button:focus {
 .patient-card {
     background-color: #ffffff;
     border: 1px solid #c5d0d7;
-    border-radius: 0;
+    border-radius: 8px;
     padding: 0;
-    margin-bottom: 16px;
-    box-shadow: none;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     color: #26343d;
 }
 
@@ -399,8 +397,7 @@ button:focus {
 .statistics-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    background-color: #ffffff;
-    border: 1px solid #c5d0d7;
+    gap: 12px;
 }
 
 /* Individual statistic */
@@ -412,22 +409,12 @@ button:focus {
     border-right: 1px solid #d8e0e5;
     border-bottom: 1px solid #d8e0e5;
     border-left: none;
+    border-radius: 8px;
 }
 
-.stat-card:last-child {
-    border-right: none;
-}
-
-.stat-card:nth-child(4n) {
-    border-right: none;
-}
-
-.stat-card:nth-child(n+5) {
-    background-color: #f8fafb;
-}
 
 .stat-card:nth-child(-n+4) {
-    border-top: 3px solid #2f80c9;
+    border: 1px solid #cbd5dc;
 }
 
 .stat-card h3 {
@@ -453,23 +440,18 @@ button:focus {
 
 .records-header {
     display: flex;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 30px;
+    gap: 16px;
     padding-bottom: 16px;
     margin-bottom: 20px;
-    border-bottom: 2px solid #102a43;
-}
-
-/* Filter and sort controls */
-.patient-controls {
-    display: flex;
-    gap: 14px;
+    border-bottom: none;
 }
 
 .control-group label {
     width: auto;
-    margin-bottom: 6px;
+    margin-bottom: 0;
     color: #344b5e;
     font-size: 13px;
     font-weight: 600;
@@ -550,7 +532,8 @@ button:focus {
 @media (max-width: 800px) {
 
     .form-grid,
-    .patient-details {
+    .patient-details,
+    .statistics-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -567,10 +550,6 @@ button:focus {
     .patient-search-row {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .patient-controls {
-        flex-direction: column;
     }
 
     .action-panel input,
@@ -592,12 +571,8 @@ button:focus {
 #resetFiltersButton {
     background-color: #2563a6;
     color: white;
-    border: none;
     padding: 10px 18px;
     border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
 }
 
 #resetFiltersButton:hover {
@@ -645,11 +620,6 @@ button:focus {
     }
 }
 
-/* Prevent elements from exceeding the screen width */
-* {
-    box-sizing: border-box;
-}
-
 /* Mobile layout */
 @media (max-width: 600px) {
 
@@ -688,5 +658,219 @@ button:focus {
     .form-submit-area {
         flex-wrap: wrap;
         gap: 10px;
+    }
+}
+
+/* Coloured BMI category labels */
+
+.bmi-label {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+.bmi-label.underweight {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.bmi-label.normal {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.bmi-label.overweight {
+    background-color: #ffe5b4;
+    color: #9a5700;
+}
+
+.bmi-label.obese {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+/* BMI statistics card colours */
+
+.stat-card:nth-child(5) {
+    background-color: #fff8e1;
+    border-top: 3px solid #d4a017;
+}
+
+.stat-card:nth-child(6) {
+    background-color: #eaf7ee;
+    border-top: 3px solid #2e8b57;
+}
+
+.stat-card:nth-child(7) {
+    background-color: #fff0dc;
+    border-top: 3px solid #d97706;
+}
+
+.stat-card:nth-child(8) {
+    background-color: #fdebec;
+    border-top: 3px solid #c62828;
+}
+
+/* Patient Records filter toolbar */
+
+.patient-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+    background-color: #e8eef3;
+    border: 1px solid #d1dbe1;
+    border-radius: 8px;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+#resetFiltersButton {
+    margin-left: auto;
+}
+
+/* Filter toolbar on smaller screens */
+
+@media (max-width: 900px) {
+    .patient-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-group select {
+        width: 100%;
+    }
+
+    #resetFiltersButton {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Secondary Clear Form button */
+
+#patientForm #clearButton {
+    background-color: #e8edf1;
+    color: #26343d;
+    border: 1px solid #c5d0d7;
+}
+
+#patientForm #clearButton:hover {
+    background-color: #d8e1e8;
+}
+
+/* Required fields */
+
+.required {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.required-note {
+    font-size: 13px;
+    color: #526575;
+    margin: 0 0 18px;
+}
+
+/* Patient action feedback messages */
+
+#formMessage:not(:empty),
+#searchResult:not(:empty),
+#editResult:not(:empty),
+#deleteResult:not(:empty) {
+    background-color: #eaf7ee;
+    color: #155724;
+    border: 1px solid #b7dfc2;
+    border-left: 4px solid #007f3b;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+/* Highlight a searched patient record */
+
+.patient-card.highlighted {
+    border: 2px solid #1769aa;
+    box-shadow: 0 0 0 3px #d7e8f5;
+
+}
+
+/* Make search errors red */
+
+#searchResult.error:not(:empty) {
+    background-color: #fdebec;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    border-left: 4px solid #c62828;
+}
+
+/* Further dashboard styling */
+
+.main-navigation {
+    background-color: #ffffff;
+    border: 1px solid #d6e0e8;
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: -15px auto 30px;
+}
+
+.main-navigation a {
+    display: inline-block;
+    padding: 12px 18px;
+    color: #173b59;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.main-navigation a:hover,
+.main-navigation a:focus-visible {
+    background-color: #e8f2fa;
+    color: #005eb8;
+}
+
+/* Mobile navigation menu */
+
+@media (max-width: 600px) {
+    .main-navigation {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .main-navigation a {
+        display: block;
+        text-align: left;
+        padding: 12px 16px;
+        border-radius: 6px;
+        background-color: #f5f7f9;
+        font-size: 13px;
+    }
+
+    .main-navigation a:hover,
+    .main-navigation a:focus {
+        background-color: #e8f2fa;
     }
 }

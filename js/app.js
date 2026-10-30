@@ -33,6 +33,7 @@ const resetFiltersButton = document.getElementById("resetFiltersButton");
 
 // Store patients in an array and track whether a patient is being edited
 let patients = [];
+let highlightedPatientId = null;
 let editingPatientId = null;
 submitButton.textContent = "Add Patient";
 clearButton.hidden = false;
@@ -75,16 +76,16 @@ function displayPatients() {
             return b.lastName.localeCompare(a.lastName);
         });
     }
-// Show the total number of patient records displayed
+    // Show the total number of patient records displayed
 
-const recordCount = document.getElementById("recordCount");
-recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patients.length + " patient records.";
+    const recordCount = document.getElementById("recordCount");
+    recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patients.length + " patient records.";
 
     // Display a message to the user when there are no records to show
     if (patientsToDisplay.length === 0) {
-     
 
-        if(patients.length === 0) {
+
+        if (patients.length === 0) {
             patientList.textContent =
                 "No patient records available. Please add a patient record.";
         } else {
@@ -100,11 +101,19 @@ recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patie
         const patientCard = document.createElement("div");
         patientCard.classList.add("patient-card");
 
+        if (
+            highlightedPatientId !== null &&
+            String(patient.patientId).toLowerCase() ===
+            String(highlightedPatientId).toLowerCase()
+        ) {
+            patientCard.classList.add("highlighted");
+        }
+
         // Create heading for patient record
         const patientHeader = document.createElement("h3");
 
         patientHeader.innerHTML =
-    `${patient.firstName} ${patient.lastName} <span class="patient-id">| Patient ID: ${patient.patientId}</span>`;
+            `${patient.firstName} ${patient.lastName} <span class="patient-id">| Patient ID: ${patient.patientId}</span>`;
 
         patientCard.appendChild(patientHeader);
 
@@ -120,8 +129,12 @@ recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patie
     <p><strong>Sex</strong><span>${patient.sex}</span></p>
     <p><strong>Height</strong><span>${patient.height} cm</span></p>
     <p><strong>Weight</strong><span>${patient.weight} kg</span></p>
-
-    <p><strong>BMI</strong><span>${patient.bmi ?? "Not recorded"} ${patient.bmiCategory ? "(" + patient.bmiCategory + ")" : ""}</span></p>
+    <p><strong>BMI</strong>
+    <span>
+        ${patient.bmi ?? "Not recorded"}
+        ${patient.bmiCategory ? `<span class="bmi-label ${patient.bmiCategory.toLowerCase()}">${patient.bmiCategory}</span>` : ""}
+    </span>
+</p>
 `;
         patientCard.appendChild(patientDetails);
 
@@ -413,7 +426,7 @@ patientForm.addEventListener("submit", function (event) {
         cancelEditButton.hidden = true;
         formHeading.textContent = "  Add Patient Record";
         formInstructions.textContent = "Enter patient details below to add a new record.";
-document.getElementById("patientId").disabled = false;
+        document.getElementById("patientId").disabled = false;
         manageId.value = "";
     } else {
 
@@ -444,17 +457,21 @@ document.getElementById("patientId").disabled = false;
 searchButton.addEventListener("click", function () {
     editResult.textContent = "";
     deleteResult.textContent = "";
-    
-    
+
+
     const idToFind = manageId.value.trim();
 
     // Find a patient whose patientId matches the input value
     const foundPatient = patients.find(function (patient) {
-       return patient.patientId.toLowerCase() === idToFind.toLowerCase();
+        return patient.patientId.toLowerCase() === idToFind.toLowerCase();
     });
+
+    highlightedPatientId = foundPatient ? foundPatient.patientId : null;
+    displayPatients();
 
 
     if (foundPatient) {
+        searchResult.classList.remove("error");
         searchResult.innerHTML = `
     <strong>Patient found:</strong><br>
     ${foundPatient.firstName} ${foundPatient.lastName}<br>
@@ -468,6 +485,7 @@ searchButton.addEventListener("click", function () {
     Email: ${foundPatient.email}
 `;
     } else {
+        searchResult.classList.add("error");
         if (idToFind === "") {
             searchResult.textContent = "Please enter a Patient ID to search.";
         } else {
@@ -485,8 +503,8 @@ searchButton.addEventListener("click", function () {
 deleteButton.addEventListener("click", function () {
     searchResult.textContent = "";
     editResult.textContent = "";
-    
-    
+
+
     const idToDelete = manageId.value.trim();
     console.log("Patient ID to delete:", idToDelete);
 
@@ -535,21 +553,21 @@ deleteButton.addEventListener("click", function () {
 //Edit an existing patient record by patient ID
 
 editButton.addEventListener("click", function () {
-  searchResult.textContent = "";
-  deleteResult.textContent = "";
-  formMessage.textContent = "";
-  
-  
-  
+    searchResult.textContent = "";
+    deleteResult.textContent = "";
+    formMessage.textContent = "";
+
+
+
     const idToEdit = manageId.value.trim();
     if (idToEdit === "") {
         editResult.textContent = "Please enter a Patient ID to edit.";
         return;
     }
 
-   const foundPatient = patients.find(function (patient) {
-    return patient.patientId.toLowerCase() === idToEdit.toLowerCase();
-});
+    const foundPatient = patients.find(function (patient) {
+        return patient.patientId.toLowerCase() === idToEdit.toLowerCase();
+    });
 
     if (!foundPatient) {
         editResult.textContent = "Patient not found";
@@ -580,7 +598,7 @@ editButton.addEventListener("click", function () {
     document.getElementById("mobile").value = foundPatient.mobile;
     document.getElementById("email").value = foundPatient.email;
     document.getElementById("healthInfo").value = foundPatient.healthInfo;
-document.getElementById("patientId").disabled = true;
+    document.getElementById("patientId").disabled = true;
     editResult.textContent = "Patient found. You can now edit the details in the form above.";
 });
 
@@ -594,7 +612,7 @@ cancelEditButton.addEventListener("click", function () {
     editingPatientId = null;
     patientForm.reset();
 
-document.getElementById("patientId").disabled = false;
+    document.getElementById("patientId").disabled = false;
     submitButton.textContent = "Add Patient";
     cancelEditButton.hidden = true;
     clearButton.hidden = false;
