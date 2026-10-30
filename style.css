@@ -844,8 +844,10 @@ button:focus {
     transition: background-color 0.2s, color 0.2s;
 }
 
+/* Highlight the selected navigation link */
 .main-navigation a:hover,
-.main-navigation a:focus-visible {
+.main-navigation a:focus-visible,
+.main-navigation a.active {
     background-color: #e8f2fa;
     color: #005eb8;
 }
@@ -867,11 +869,6 @@ button:focus {
         border-radius: 6px;
         background-color: #f5f7f9;
         font-size: 13px;
-    }
-
-    .main-navigation a:hover,
-    .main-navigation a:focus {
-        background-color: #e8f2fa;
     }
 }
 

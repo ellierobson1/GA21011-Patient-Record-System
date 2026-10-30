@@ -634,8 +634,9 @@ resetFiltersButton.addEventListener("click", function () {
     displayPatients();
 });
 
-// Highlight selcted navigation link
-const navLinks = document.querySelectorAll(".main-navigation a");
+// Highlight the selected navigation link
+const navigationLinks = document.querySelectorAll(".main-navigation a");
+
 navigationLinks.forEach(link => {
     link.addEventListener("click", () => {
         navigationLinks.forEach(navLink => {
