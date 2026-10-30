@@ -633,3 +633,15 @@ resetFiltersButton.addEventListener("click", function () {
     sortPatients.value = "";
     displayPatients();
 });
+
+// Highlight selcted navigation link
+const navLinks = document.querySelectorAll(".main-navigation a");
+navigationLinks.forEach(link => {
+    link.addEventListener("click", () => {
+        navigationLinks.forEach(navLink => {
+            navLink.classList.remove("active");
+        });
+
+        link.classList.add("active");
+    });
+});

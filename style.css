@@ -874,3 +874,8 @@ button:focus {
         background-color: #e8f2fa;
     }
 }
+
+.main-navigation a.active {
+    background-color: #e8f2fa;
+    color: #005eb8;
+}
