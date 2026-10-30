@@ -32,8 +32,8 @@
     <section class="patient-entry">
 
         <div class="section-heading">
-            <h2>Add Patient Record</h2>
-            <p> To add a new patient to the system, please add their details below.</p>
+            <h2 id="formHeading"> Add Patient Record</h2>
+            <p id="formInstructions">Enter patient details below to add a new record.</p>
         </div>
 
         <!-- Patient input fields -->
@@ -104,6 +104,8 @@
             <div class="form-submit-area">
                 <p id="formMessage"> </p>
                 <button type="submit" id="submitButton">Add Patient</button>
+                <button type="button" id="clearButton">Clear Form</button>
+                <button type="button" id="cancelEditButton" hidden>Cancel Edit</button>
             </div>
         </form>
 
@@ -209,10 +211,11 @@
 
             <div class="patient-controls">
 
+                <!-- Filter BMI -->
+
                 <div class="control-group">
                     <label for="filterBmi">BMI Category</label>
 
-                    <!-- Filter BMI -->
 
                     <select id="filterBmi">
                         <option value="all">All BMI Categories</option>
@@ -223,6 +226,8 @@
                     </select>
 
                 </div>
+
+             
 
                 <!-- Sort patient records -->
                 <div class="control-group">
@@ -235,11 +240,22 @@
 
                     </select>
 
+                    </div>
+
+                    <!-- Reset filters and sorting options -->
+
+                    <div class="control-group">
+                        <button type="button" id="resetFiltersButton">Reset Filters</button>
+                    </div>
+
                 </div>
 
             </div>
 
-        </div>
+        <!-- Number of patient records -->
+        <p id="recordCount"></p>
+
+
         <!--- Patient records displayed using JavaScript -->
         <div id="patientList"></div>
 

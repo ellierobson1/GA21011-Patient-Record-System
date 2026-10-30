@@ -587,3 +587,106 @@ button:focus {
     }
 
 }
+
+/* Reset Filters button */
+#resetFiltersButton {
+    background-color: #2563a6;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#resetFiltersButton:hover {
+    background-color: #174a80;
+}
+
+#resetFiltersButton:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+/* Patient record count */
+#recordCount {
+    color: #444;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+/* Patient record controls on smaller screens */
+@media (max-width: 900px) {
+
+    .records-header {
+        display: block;
+    }
+
+    .patient-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .patient-controls .control-group {
+        width: 100%;
+    }
+
+    .patient-controls select {
+        width: 100%;
+    }
+
+    #resetFiltersButton {
+        width: 100%;
+    }
+}
+
+/* Prevent elements from exceeding the screen width */
+* {
+    box-sizing: border-box;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+
+    .patient-search-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .patient-search-row input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .patient-controls,
+    .patient-controls select {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* Keep form fields inside the screen */
+.form-field {
+    min-width: 0;
+}
+
+/* Form buttons on mobile */
+@media (max-width: 600px) {
+    .form-submit-area {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}

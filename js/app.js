@@ -24,12 +24,18 @@ const obeseCount = document.getElementById("obeseCount")
 const female50Plus = document.getElementById("female50Plus");
 const sortPatients = document.getElementById("sortPatients");
 const filterBmi = document.getElementById("filterBmi");
+const clearFilterButton = document.getElementById("clearFilterButton");
+const cancelEditButton = document.getElementById("cancelEditButton");
+const formHeading = document.getElementById("formHeading");
+const formInstructions = document.getElementById("formInstructions");
+const resetFiltersButton = document.getElementById("resetFiltersButton");
 
 
 // Store patients in an array and track whether a patient is being edited
 let patients = [];
 let editingPatientId = null;
 submitButton.textContent = "Add Patient";
+clearButton.hidden = false;
 
 // Load patients from Local Storage if available, convert JSON string
 //  back to an array of objects, and assign it to the patients variable
@@ -45,7 +51,7 @@ console.log("Loaded patients:", patients);
 function displayPatients() {
     patientList.innerHTML = "";
 
-    let patientsToDisplay = patients;
+    let patientsToDisplay = [...patients];
 
     // Filter patient records by BMI category
     if (filterBmi.value !== "all") {
@@ -56,6 +62,23 @@ function displayPatients() {
         });
 
     }
+
+    // Sort patient records by surname if sorting option is selected
+    if (sortPatients.value === "surnameAZ") {
+        patientsToDisplay.sort(function (a, b) {
+            return a.lastName.localeCompare(b.lastName);
+        });
+    }
+
+    if (sortPatients.value === "surnameZA") {
+        patientsToDisplay.sort(function (a, b) {
+            return b.lastName.localeCompare(a.lastName);
+        });
+    }
+// Show the total number of patient records displayed
+
+const recordCount = document.getElementById("recordCount");
+recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patients.length + " patient records.";
 
     // Display a message to the user when there are no records to show
     if (patientsToDisplay.length === 0) {
@@ -138,21 +161,6 @@ function displayPatients() {
 // Sort patient records by surname 
 
 sortPatients.addEventListener("change", function () {
-
-    if (sortPatients.value === "surnameAZ") {
-
-        patients.sort(function (a, b) {
-            return a.lastName.localeCompare(b.lastName);
-        });
-
-    }
-
-    if (sortPatients.value === "surnameZA") {
-        patients.sort(function (a, b) {
-            return b.lastName.localeCompare(a.lastName)
-        });
-    }
-
     displayPatients();
 
 });
@@ -402,6 +410,9 @@ patientForm.addEventListener("submit", function (event) {
         editingPatientId = null;
         submitButton.textContent = "Add Patient";
         formMessage.textContent = "Patient details updated successfully.";
+        cancelEditButton.hidden = true;
+        formHeading.textContent = "  Add Patient Record";
+        formInstructions.textContent = "Enter patient details below to add a new record.";
 document.getElementById("patientId").disabled = false;
         manageId.value = "";
     } else {
@@ -479,6 +490,13 @@ deleteButton.addEventListener("click", function () {
     const idToDelete = manageId.value.trim();
     console.log("Patient ID to delete:", idToDelete);
 
+    // Validate that a patient ID has been entered before attempting to delete
+
+    if (idToDelete === "") {
+        deleteResult.textContent = "Please enter a Patient ID to delete.";
+        return;
+    }
+
     // Find the array position of the patient that should be deleted
 
     const patientIndex = patients.findIndex(function (patient) {
@@ -498,13 +516,14 @@ deleteButton.addEventListener("click", function () {
     );
 
     if (!confirmDelete) {
-        deleteResult.textContent = "Delete cancelled";
+        deleteResult.textContent = "Delete cancelled.";
         return;
     }
 
     // Remove one patient from the array at the identified position
 
     patients.splice(patientIndex, 1);
+    searchResult.textContent = "";
     localStorage.setItem("patients", JSON.stringify(patients));
     displayPatients();
     updateStatistics();
@@ -518,10 +537,15 @@ deleteButton.addEventListener("click", function () {
 editButton.addEventListener("click", function () {
   searchResult.textContent = "";
   deleteResult.textContent = "";
+  formMessage.textContent = "";
   
   
   
     const idToEdit = manageId.value.trim();
+    if (idToEdit === "") {
+        editResult.textContent = "Please enter a Patient ID to edit.";
+        return;
+    }
 
    const foundPatient = patients.find(function (patient) {
     return patient.patientId.toLowerCase() === idToEdit.toLowerCase();
@@ -536,6 +560,13 @@ editButton.addEventListener("click", function () {
     // Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
     editingPatientId = foundPatient.patientId;
     submitButton.textContent = "Update Patient";
+    cancelEditButton.hidden = false;
+    clearButton.hidden = true;
+    formHeading.textContent = "  Edit Patient Record";
+    formInstructions.textContent = "Edit the patient details below and click 'Update Patient' to save changes.";
+
+    // Automatically scroll to the form for editing when a patient is found
+    patientForm.scrollIntoView({ behavior: "smooth" });
 
     // Populate the form fields with the found patient's details for editing
 
@@ -556,4 +587,31 @@ document.getElementById("patientId").disabled = true;
 //Clears the form fields and gets rid of patient details updated message
 patientForm.addEventListener("input", function () {
     formMessage.textContent = "";
+});
+
+//Cancel editing and reset the form to add a new patient
+cancelEditButton.addEventListener("click", function () {
+    editingPatientId = null;
+    patientForm.reset();
+
+document.getElementById("patientId").disabled = false;
+    submitButton.textContent = "Add Patient";
+    cancelEditButton.hidden = true;
+    clearButton.hidden = false;
+    formHeading.textContent = "  Add Patient Record";
+    formMessage.textContent = "Edit cancelled. You can now add a new patient.";
+    editResult.textContent = "";
+});
+
+// Clear form fields and reset the form to add a new patient
+clearButton.addEventListener("click", function () {
+    patientForm.reset();
+    formMessage.textContent = "Form cleared. You can now add a new patient.";
+});
+
+// Reset filters and sorting options
+resetFiltersButton.addEventListener("click", function () {
+    filterBmi.value = "all";
+    sortPatients.value = "";
+    displayPatients();
 });
