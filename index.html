@@ -29,12 +29,12 @@
     </header>
 
     <!-- Main navigation -->
-<nav class="main-navigation" aria-label="Main navigation">
-    <a href="#statistics">Dashboard</a>
-    <a href="#add-patient">Add Patient</a>
-    <a href="#manage-patients">Manage Patients</a>
-    <a href="#patient-records">Patient Records</a>
-</nav>
+    <nav class="main-navigation" aria-label="Main navigation">
+        <a href="#statistics">Dashboard</a>
+        <a href="#add-patient">Add Patient</a>
+        <a href="#manage-patients">Manage Patients</a>
+        <a href="#patient-records">Patient Records</a>
+    </nav>
 
 
     <!-- Patient Statistics -->
@@ -94,39 +94,7 @@
 
     </section>
 
-
-    <!-- Patient record management -->
-
-    <div class="section-heading patient-entry">
-        <h2>Manage Patient Records</h2>
-        <p>Search, edit or delete an existing patient record.</p>
-    </div>
-
-    <section class="patient-actions" id="manage-patients">
-
-        <div class="action-panel">
-
-            <h2>Find Patient Record</h2>
-            <div class="patient-search-row">
-
-                <label for="manageId">Patient ID:</label>
-                <input type="text" id="manageId" name="manageId">
-
-                <div class="action-buttons">
-                    <button type="button" id="searchButton">Search</button>
-                    <button type="button" id="editButton">Edit</button>
-                    <button type="button" id="deleteButton">Delete</button>
-                </div>
-            </div>
-
-            <div id="searchResult"></div>
-            <p id="editResult"></p>
-            <p id="deleteResult"></p>
-
-        </div>
-
-    </section>
-<!-- Patient Form -->
+    <!-- Patient Form -->
     <section class="patient-entry" id="add-patient">
 
         <div class="section-heading">
@@ -147,24 +115,24 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="firstName">First Name:</label>
+                    <label for="firstName">First Name: <span class="required">*</span></label>
                     <input type="text" id="firstName" name="firstName" required>
                 </div>
 
                 <div class="form-field">
-                    <label for="lastName">Last Name:</label>
+                    <label for="lastName">Last Name: <span class="required">*</span></label>
                     <input type="text" id="lastName" name="lastName" required>
 
                 </div>
 
                 <div class="form-field">
-                    <label for="dateOfBirth">Date of Birth:</label>
+                    <label for="dateOfBirth">Date of Birth: <span class="required">*</span></label>
                     <input type="date" id="dateOfBirth" name="dateOfBirth" required>
 
                 </div>
 
                 <div class="form-field">
-                    <label for="sex">Sex:</label>
+                    <label for="sex">Sex: <span class="required">*</span></label>
                     <select id="sex" name="sex" required>
                         <option value="">Select</option>
                         <option value="Male">Male</option>
@@ -173,21 +141,21 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="mobile">Mobile:</label>
+                    <label for="mobile">Mobile: <span class="required">*</span></label>
                     <input type="text" id="mobile" name="mobile" required>
                 </div>
 
                 <div class="form-field">
-                    <label for="height">Height (cm):</label>
+                    <label for="height">Height (cm): <span class="required">*</span></label>
                     <input type="number" id="height" name="height" required>
                 </div>
 
                 <div class="form-field">
-                    <label for="weight">Weight (kg):</label>
+                    <label for="weight">Weight (kg): <span class="required">*</span></label>
                     <input type="number" id="weight" name="weight" required>
                 </div>
                 <div class="form-field">
-                    <label for="email">Email:</label>
+                    <label for="email">Email: <span class="required">*</span></label>
                     <input type="email" id="email" name="email" required>
                 </div>
 
@@ -208,6 +176,8 @@
             </div>
         </form>
 
+    </section>
+
     <!-- Patient Records -->
     <section class="records-section" id="patient-records">
 
@@ -215,8 +185,39 @@
 
             <div class="section-heading">
                 <h2>Patient Records</h2>
-                <p>View, filter and sort stored patient records.</p>
+                <p>Search, view and manage patient records.</p>
             </div>
+
+            <!-- Patient record management -->
+
+            <section class="patient-actions" id="manage-patients">
+
+                <div class="action-panel">
+
+                    <h3>Find a Patient</h3>
+                    <div class="patient-search-row">
+
+                        <label for="manageId">Search patients:</label>
+                        <input type="search" id="manageId" name="manageId"
+                            placeholder="Patient ID, first name or surname">
+
+                        <div class="action-buttons">
+                            <button type="button" id="searchButton">Search</button>
+                        </div>
+                    </div>
+                    <div class="record-management-buttons" id="recordManagementButtons" hidden>
+                        <button type="button" id="editButton">Edit</button>
+                        <button type="button" id="deleteButton">Delete</button>
+
+                    </div>
+
+                    <div id="searchResult"></div>
+                    <p id="editResult"></p>
+                    <p id="deleteResult"></p>
+
+                </div>
+
+            </section>
 
             <div class="patient-controls">
 
@@ -236,7 +237,7 @@
 
                 </div>
 
-             
+
 
                 <!-- Sort patient records -->
                 <div class="control-group">
@@ -249,26 +250,56 @@
 
                     </select>
 
-                    </div>
+                </div>
 
-                    <!-- Reset filters and sorting options -->
+                <!-- Reset filters and sorting options -->
 
-                    <div class="control-group">
-                        <button type="button" id="resetFiltersButton">Reset Filters</button>
-                    </div>
-
+                <div class="control-group">
+                    <button type="button" id="resetFiltersButton">Show All Records</button>
+                    <button type="button" id="exportCsvButton">Export CSV</button>
                 </div>
 
             </div>
 
-        <!-- Number of patient records -->
+        </div>
+
+
         <p id="recordCount"></p>
 
 
-        <!--- Patient records displayed using JavaScript -->
-        <div id="patientList"></div>
+        <!-- Patient records table -->
+        <div class="patient-table-container">
+            <table id="patientTable" class="patient-table" aria-label="Patient records">
+                <thead>
+                    <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Sex</th>
+                        <th scope="col">BMI</th>
+                        <th scope="col">BMI Category</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
 
-    </section>
+                <tbody id="patientList">
+                    <!-- Patient records will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Patient records pagination -->
+        <div class="pagination-controls">
+            <button type="button" id="previousPage" disabled>
+                Previous
+            </button>
+
+            <span id="pageInfo">Page 1 of 1</span>
+
+            <button type="button" id="nextPage" disabled>
+                Next
+            </button>
+        </div>
 
     </section>
 

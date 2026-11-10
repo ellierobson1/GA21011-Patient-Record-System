@@ -1,4 +1,4 @@
-console.log("Patient Record System loaded");
+
 
 // Get references to the HTML elements used by patient record system
 
@@ -12,6 +12,7 @@ const savedPatients = localStorage.getItem("patients");
 const deleteButton = document.getElementById("deleteButton");
 const deleteResult = document.getElementById("deleteResult");
 const editButton = document.getElementById("editButton");
+const recordManagementButtons = document.getElementById("recordManagementButtons");
 const manageId = document.getElementById("manageId");
 const editResult = document.getElementById("editResult");
 const totalPatients = document.getElementById("totalPatients");
@@ -19,22 +20,31 @@ const averageBmiMale = document.getElementById("averageBmiMale");
 const averageBmiFemale = document.getElementById("averageBmiFemale");
 const underweightCount = document.getElementById("underweightCount");
 const normalCount = document.getElementById("normalCount");
-const overWeightCount = document.getElementById("overweightCount");
-const obeseCount = document.getElementById("obeseCount")
+const overweightCount = document.getElementById("overweightCount");
+const obeseCount = document.getElementById("obeseCount");
 const female50Plus = document.getElementById("female50Plus");
 const sortPatients = document.getElementById("sortPatients");
 const filterBmi = document.getElementById("filterBmi");
-const clearFilterButton = document.getElementById("clearFilterButton");
+const clearButton = document.getElementById("clearButton");
 const cancelEditButton = document.getElementById("cancelEditButton");
 const formHeading = document.getElementById("formHeading");
 const formInstructions = document.getElementById("formInstructions");
 const resetFiltersButton = document.getElementById("resetFiltersButton");
+const exportCsvButton = document.getElementById("exportCsvButton");
 
+// Pagination controls
+const previousPage = document.getElementById("previousPage");
+const nextPage = document.getElementById("nextPage");
+const pageInfo = document.getElementById("pageInfo");
+
+let currentPage = 1;
+const recordsPerPage = 10;
 
 // Store patients in an array and track whether a patient is being edited
 let patients = [];
 let highlightedPatientId = null;
 let editingPatientId = null;
+let matchingSearchIds = null;
 submitButton.textContent = "Add Patient";
 clearButton.hidden = false;
 
@@ -45,7 +55,6 @@ if (savedPatients) {
     patients = JSON.parse(savedPatients);
 }
 
-console.log("Loaded patients:", patients);
 
 // Display patient records on the page
 
@@ -54,10 +63,17 @@ function displayPatients() {
 
     let patientsToDisplay = [...patients];
 
+    // Show only patients matching the combined search
+    if (matchingSearchIds !== null) {
+        patientsToDisplay = patientsToDisplay.filter(function (patient) {
+            return matchingSearchIds.includes(patient.patientId);
+        });
+    }
+
     // Filter patient records by BMI category
     if (filterBmi.value !== "all") {
 
-        patientsToDisplay = patients.filter(function (patient) {
+        patientsToDisplay = patientsToDisplay.filter(function (patient) {
             return patient.bmiCategory === filterBmi.value;
 
         });
@@ -76,104 +92,185 @@ function displayPatients() {
             return b.lastName.localeCompare(a.lastName);
         });
     }
+
+    // Calculate number of pages based on the number of patient records and records per page
+    const totalPages = Math.max(1, Math.ceil(patientsToDisplay.length / recordsPerPage));
+
+    // Keep the current page within the available range of pages
+    currentPage = Math.min(currentPage, totalPages);
+
+    // Calculate which records to display based on the current page and records per page
+    const startIndex = (currentPage - 1) * recordsPerPage;
+    const endIndex = startIndex + recordsPerPage;
+    const patientsOnPage = patientsToDisplay.slice(startIndex, endIndex);
+
+    // Update pagination controls 
+    pageInfo.textContent = "Page " + currentPage + " of " + totalPages;
+    previousPage.disabled = currentPage === 1;
+    nextPage.disabled = currentPage === totalPages;
+
     // Show the total number of patient records displayed
 
     const recordCount = document.getElementById("recordCount");
-    recordCount.textContent = "Showing " + patientsToDisplay.length + " of " + patients.length + " patient records.";
+    const firstRecord = patientsOnPage.length === 0 ? 0 : startIndex + 1;
+    const lastRecord = startIndex + patientsOnPage.length;
+
+    recordCount.textContent = "Showing " + firstRecord + "–" + lastRecord +
+        " of " + patientsToDisplay.length + " patient records.";
 
     // Display a message to the user when there are no records to show
-    if (patientsToDisplay.length === 0) {
+    if (patientsOnPage.length === 0) {
 
 
         if (patients.length === 0) {
-            patientList.textContent =
-                "No patient records available. Please add a patient record.";
+            patientList.innerHTML = "<tr><td colspan='7'>No patient records available. Please add a new patient.</td></tr>";
         } else {
-            patientList.textContent =
-                "No patient records match the selected BMI category.";
+            patientList.innerHTML = "<tr><td colspan='7'>No matching patients found. Try a different name or adjust your filters.</td></tr>";
         }
         return;
     }
 
-    patientsToDisplay.forEach(function (patient) {
 
-        // Create card for each patient record
-        const patientCard = document.createElement("div");
-        patientCard.classList.add("patient-card");
+    patientsOnPage.forEach(function (patient) {
 
-        if (
-            highlightedPatientId !== null &&
-            String(patient.patientId).toLowerCase() ===
-            String(highlightedPatientId).toLowerCase()
-        ) {
-            patientCard.classList.add("highlighted");
+        // Create table row for each patient record
+        const patientRow = document.createElement("tr");
+
+        // Highlight the patient table row if it matches the searched patient ID
+        if (highlightedPatientId !== null &&
+            String(patient.patientId).toLowerCase() === highlightedPatientId.toLowerCase()) {
+            patientRow.classList.add("highlighted");
         }
 
-        // Create heading for patient record
-        const patientHeader = document.createElement("h3");
-
-        patientHeader.innerHTML =
-            `${patient.firstName} ${patient.lastName} <span class="patient-id">| Patient ID: ${patient.patientId}</span>`;
-
-        patientCard.appendChild(patientHeader);
-
-
-        // Create paragraph for patient details
-
-        const patientDetails = document.createElement("div");
-        patientDetails.classList.add("patient-details");
-
-        patientDetails.innerHTML = `
-    <p><strong>Date of Birth</strong><span>${patient.dateOfBirth}</span></p>
-    <p><strong>Age</strong><span>${patient.age ?? "Not recorded"}</span></p>
-    <p><strong>Sex</strong><span>${patient.sex}</span></p>
-    <p><strong>Height</strong><span>${patient.height} cm</span></p>
-    <p><strong>Weight</strong><span>${patient.weight} kg</span></p>
-    <p><strong>BMI</strong>
-    <span>
-        ${patient.bmi ?? "Not recorded"}
-        ${patient.bmiCategory ? `<span class="bmi-label ${patient.bmiCategory.toLowerCase()}">${patient.bmiCategory}</span>` : ""}
-    </span>
-</p>
+        // Create the patient table row
+        patientRow.innerHTML = `
+    <td>${patient.patientId}</td>
+    <td>${patient.firstName} ${patient.lastName}</td>
+    <td>${patient.age ?? "Not recorded"}</td>
+    <td>${patient.sex}</td>
+    <td>${patient.bmi ?? "Not recorded"}</td>
+    <td>${patient.bmiCategory || "Not recorded"}</td>
+    <td>
+        <button type="button" class="view-details-button">
+            View Details
+        </button>
+    </td>
 `;
-        patientCard.appendChild(patientDetails);
 
+        // Add the patient row to the patient table
+        patientList.appendChild(patientRow);
 
-        // Create contact details 
-        const contactDetails = document.createElement("div");
-        contactDetails.classList.add("patient-contact");
+        // Show or hide the patient details when the "View Details" button is clicked
+        const viewDetailsButton = patientRow.querySelector(".view-details-button");
+        viewDetailsButton.setAttribute("aria-expanded", "false");
+        viewDetailsButton.addEventListener("click", function () {
 
-        contactDetails.innerHTML = `
-             <h4>Contact Details</h4>
-             <strong>Mobile:</strong> ${patient.mobile} <br>
-            <strong>Email:</strong> ${patient.email}
+            // Check if the patient details are already displayed
+            const existingDetails = patientRow.nextElementSibling;
 
+            if (existingDetails && existingDetails.classList.contains("patient-details-row")) {
+                existingDetails.remove();
+                viewDetailsButton.textContent = "View Details";
+                viewDetailsButton.setAttribute("aria-expanded", "false");
+                return;
+            }
+            // Create expanded patient details row
+            const detailRow = document.createElement("tr");
+            detailRow.classList.add("patient-details-row");
 
-            `;
+            const detailCell = document.createElement("td");
+            detailCell.colSpan = 7;
 
-        patientCard.appendChild(contactDetails);
-        // Create health information section
-        const healthDetails = document.createElement("div");
-        healthDetails.classList.add("patient-health");
+            const details = document.createElement("div");
+            details.classList.add("expanded-details");
 
-        healthDetails.innerHTML = `
-            <h4>Health Information</h4>
-            <p>${patient.healthInfo || "No health information recorded."}</p>
-            `;
+            // Create the content for the expanded patient details
+            const fields = [
+                ["Date of Birth", patient.dateOfBirth],
+                ["Height", patient.height != null ? patient.height + " cm" : "Not recorded"],
+                ["Weight", patient.weight != null ? patient.weight + " kg" : "Not recorded"],
+                ["Mobile", patient.mobile],
+                ["Email", patient.email],
+                ["Health Info", patient.healthInfo]
+            ];
 
-        patientCard.appendChild(healthDetails);
+            fields.forEach(function (field) {
+                const paragraph = document.createElement("p");
+                const label = document.createElement("strong");
 
+                label.textContent = field[0] + ": ";
+                paragraph.appendChild(label);
+                paragraph.appendChild(
+                    document.createTextNode(field[1] || "Not recorded")
+                );
 
-        // Add completed card to patient list 
-        patientList.appendChild(patientCard);
+                details.appendChild(paragraph);
+            });
+
+            detailCell.appendChild(details);
+            detailRow.appendChild(detailCell);
+
+            // Display the details underneath the selected patient
+            patientRow.after(detailRow);
+
+            // Update the button when details are expanded
+            viewDetailsButton.textContent = "Hide Details";
+            viewDetailsButton.setAttribute("aria-expanded", "true");
+
+        });
 
     });
 
 }
 
-// Sort patient records by surname 
+
+// Go to the previous page
+previousPage.addEventListener("click", function () {
+    if (currentPage > 1) {
+        currentPage--;
+        displayPatients();
+    }
+});
+
+// Go to the next page
+nextPage.addEventListener("click", function () {
+    currentPage++;
+    displayPatients();
+});
+
+
+// Search patients automatically as the user types
+manageId.addEventListener("input", function () {
+    const searchTerm = manageId.value.trim().toLowerCase();
+
+    matchingSearchIds = null;
+    highlightedPatientId = null;
+    recordManagementButtons.hidden = true;
+    searchResult.textContent = "";
+    editResult.textContent = "";
+    deleteResult.textContent = "";
+
+    matchingSearchIds = patients
+        .filter(function (patient) {
+            const fullName = (
+                patient.firstName + " " + patient.lastName
+            ).toLowerCase();
+
+            return patient.patientId.toLowerCase().includes(searchTerm) ||
+                patient.firstName.toLowerCase().includes(searchTerm) ||
+                patient.lastName.toLowerCase().includes(searchTerm) ||
+                fullName.includes(searchTerm);
+        })
+        .map(function (patient) {
+            return patient.patientId;
+        });
+
+    currentPage = 1;
+    displayPatients();
+});
 
 sortPatients.addEventListener("change", function () {
+    currentPage = 1; // Reset to the first page when sorting changes
     displayPatients();
 
 });
@@ -181,6 +278,7 @@ sortPatients.addEventListener("change", function () {
 
 // Filter patient records when BMI category changes 
 filterBmi.addEventListener("change", function () {
+    currentPage = 1; // Reset to the first page when filtering changes
     displayPatients();
 
 });
@@ -240,35 +338,26 @@ function updateStatistics() {
     // Count patients in each BMI category
     const underweightPatients = patients.filter(function (patient) {
         return patient.bmiCategory === "Underweight";
-    });
+    }).length;
 
-    const normalPatients = patients.filter(function (patient) {
+    normalCount.textContent = patients.filter(function (patient) {
         return patient.bmiCategory === "Normal";
-    });
+    }).length;
 
-    const overweightPatients = patients.filter(function (patient) {
+    overweightCount.textContent = patients.filter(function (patient) {
         return patient.bmiCategory === "Overweight";
-    });
+    }).length;
 
-    const obesePatients = patients.filter(function (patient) {
+    obeseCount.textContent = patients.filter(function (patient) {
         return patient.bmiCategory === "Obese";
-    });
-
-    // Display the number of patients in each BMI category
-    underweightCount.textContent = underweightPatients.length;
-    normalCount.textContent = normalPatients.length;
-    overweightCount.textContent = overweightPatients.length;
-    obeseCount.textContent = obesePatients.length;
+    }).length;
 
 
-    // Count female patients aged 50 or above 
 
-    const femalePatients50Plus = patients.filter(function (patient) {
+    // Count female patients aged 50 or above
+    female50Plus.textContent = patients.filter(function (patient) {
         return patient.sex === "Female" && patient.age >= 50;
-
-    });
-
-    female50Plus.textContent = femalePatients50Plus.length;
+    }).length;
 
 }
 
@@ -366,8 +455,6 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    console.log("Calculated Age:", age);
-
     // Convert height from cm to m and calculate BMI
 
     const heightInMetres = height / 100;
@@ -375,7 +462,6 @@ patientForm.addEventListener("submit", function (event) {
 
     // Round BMI to one decimal place
     const roundedBmi = bmi.toFixed(1);
-    console.log("Calculated BMI:", roundedBmi);
 
     let bmiCategory = "";
 
@@ -422,12 +508,12 @@ patientForm.addEventListener("submit", function (event) {
 
         editingPatientId = null;
         submitButton.textContent = "Add Patient";
+        clearButton.hidden = false;
         formMessage.textContent = "Patient details updated successfully.";
         cancelEditButton.hidden = true;
         formHeading.textContent = "  Add Patient Record";
         formInstructions.textContent = "Enter patient details below to add a new record.";
         document.getElementById("patientId").disabled = false;
-        manageId.value = "";
     } else {
 
         patients.unshift(patient);
@@ -439,36 +525,112 @@ patientForm.addEventListener("submit", function (event) {
 
     localStorage.setItem("patients", JSON.stringify(patients));
 
-    // Refresh the displayed patient records
+    // Refresh the live search after adding or editing a patient
+    manageId.dispatchEvent(new Event("input"));
+
     displayPatients();
     updateStatistics();
 
     // Reset the form fields after submission
     patientForm.reset();
 
-    console.log(patient);
-    console.log("Add Patient Button clicked");
-    console.log("Patients:", patients);
 
 });
 
 //Search for patient by patient ID
 
 searchButton.addEventListener("click", function () {
+    recordManagementButtons.hidden = true;
     editResult.textContent = "";
     deleteResult.textContent = "";
-
+    matchingSearchIds = null; // Reset the matching search IDs when searching by patient ID
 
     const idToFind = manageId.value.trim();
 
     // Find a patient whose patientId matches the input value
-    const foundPatient = patients.find(function (patient) {
-        return patient.patientId.toLowerCase() === idToFind.toLowerCase();
+
+    const matchingPatients = patients.filter(function (patient) {
+        const searchTerm = idToFind.toLowerCase();
+
+        const fullName = (
+            patient.firstName + " " + patient.lastName
+        ).toLowerCase();
+
+        return patient.patientId.toLowerCase() === searchTerm ||
+            patient.firstName.toLowerCase() === searchTerm ||
+            patient.lastName.toLowerCase() === searchTerm ||
+            fullName === searchTerm;
     });
 
-    highlightedPatientId = foundPatient ? foundPatient.patientId : null;
-    displayPatients();
+    if (matchingPatients.length > 1) {
+        matchingSearchIds = matchingPatients.map(function (patient) {
+            return patient.patientId;
+        });
 
+        searchResult.classList.remove("error");
+        searchResult.textContent =
+            matchingPatients.length + " patients match your search. " +
+            "Their records are displayed in the table below. " +
+            "Use a Patient ID to select a record for editing or deleting.";
+
+        highlightedPatientId = null;
+        recordManagementButtons.hidden = true;
+        currentPage = 1;
+        filterBmi.value = "all";
+
+        displayPatients();
+        return;
+    }
+
+
+   const foundPatient = matchingPatients.length === 1
+    ? matchingPatients[0]
+    : null;
+
+    highlightedPatientId = foundPatient ? foundPatient.patientId : null;
+
+
+    // Reset the BMI filter if it is hiding the searched patient
+    if (foundPatient && filterBmi.value !== "all" &&
+        foundPatient.bmiCategory !== filterBmi.value) {
+
+        filterBmi.value = "all";
+    }
+    // Go to the page containing the searched patient
+    if (foundPatient) {
+        recordManagementButtons.hidden = false; // Show the edit and delete buttons when a patient is found
+        let patientsToSearch = [...patients];
+
+        // Apply the current BMI filter
+        if (filterBmi.value !== "all") {
+            patientsToSearch = patientsToSearch.filter(function (patient) {
+                return patient.bmiCategory === filterBmi.value;
+            });
+        }
+
+        // Apply the current sorting order
+        if (sortPatients.value === "surnameAZ") {
+            patientsToSearch.sort(function (a, b) {
+                return a.lastName.localeCompare(b.lastName);
+            });
+        }
+
+        if (sortPatients.value === "surnameZA") {
+            patientsToSearch.sort(function (a, b) {
+                return b.lastName.localeCompare(a.lastName);
+            });
+        }
+
+        const patientIndex = patientsToSearch.findIndex(function (patient) {
+            return patient.patientId === foundPatient.patientId;
+        });
+
+        if (patientIndex !== -1) {
+            currentPage = Math.floor(patientIndex / recordsPerPage) + 1;
+        }
+    }
+
+    displayPatients();
 
     if (foundPatient) {
         searchResult.classList.remove("error");
@@ -493,9 +655,6 @@ searchButton.addEventListener("click", function () {
         }
     }
 
-    console.log("Searching for:", idToFind);
-    console.log("Found patient:", foundPatient);
-
 });
 
 //Delete patient record by patient ID
@@ -506,7 +665,6 @@ deleteButton.addEventListener("click", function () {
 
 
     const idToDelete = manageId.value.trim();
-    console.log("Patient ID to delete:", idToDelete);
 
     // Validate that a patient ID has been entered before attempting to delete
 
@@ -541,13 +699,14 @@ deleteButton.addEventListener("click", function () {
     // Remove one patient from the array at the identified position
 
     patients.splice(patientIndex, 1);
-    searchResult.textContent = "";
+    recordManagementButtons.hidden = true; // Hide the edit and delete buttons after deletion
     localStorage.setItem("patients", JSON.stringify(patients));
-    displayPatients();
-    updateStatistics();
-    deleteResult.textContent = "Patient deleted successfully.";
 
+   // Refresh the live search after deleting a patient
+manageId.dispatchEvent(new Event("input"));
 
+updateStatistics();
+deleteResult.textContent = "Patient deleted successfully.";
 });
 
 //Edit an existing patient record by patient ID
@@ -566,7 +725,16 @@ editButton.addEventListener("click", function () {
     }
 
     const foundPatient = patients.find(function (patient) {
-        return patient.patientId.toLowerCase() === idToEdit.toLowerCase();
+        const searchTerm = idToEdit.toLowerCase();
+
+        const fullName = (
+            patient.firstName + " " + patient.lastName
+        ).toLowerCase();
+
+        return patient.patientId.toLowerCase() === searchTerm ||
+            patient.firstName.toLowerCase() === searchTerm ||
+            patient.lastName.toLowerCase() === searchTerm ||
+            fullName === searchTerm;
     });
 
     if (!foundPatient) {
@@ -599,7 +767,7 @@ editButton.addEventListener("click", function () {
     document.getElementById("email").value = foundPatient.email;
     document.getElementById("healthInfo").value = foundPatient.healthInfo;
     document.getElementById("patientId").disabled = true;
-    editResult.textContent = "Patient found. You can now edit the details in the form above.";
+    editResult.textContent = "Patient found. You can now edit the details in the form below.";
 });
 
 //Clears the form fields and gets rid of patient details updated message
@@ -617,6 +785,7 @@ cancelEditButton.addEventListener("click", function () {
     cancelEditButton.hidden = true;
     clearButton.hidden = false;
     formHeading.textContent = "  Add Patient Record";
+    recordManagementButtons.hidden = true; // Hide the edit and delete buttons when cancelling edit
     formMessage.textContent = "Edit cancelled. You can now add a new patient.";
     editResult.textContent = "";
 });
@@ -627,10 +796,13 @@ clearButton.addEventListener("click", function () {
     formMessage.textContent = "Form cleared. You can now add a new patient.";
 });
 
-// Reset filters and sorting options
 resetFiltersButton.addEventListener("click", function () {
     filterBmi.value = "all";
     sortPatients.value = "";
+    manageId.value = "";
+    matchingSearchIds = null;
+    highlightedPatientId = null;
+    currentPage = 1;
     displayPatients();
 });
 
@@ -645,4 +817,120 @@ navigationLinks.forEach(link => {
 
         link.classList.add("active");
     });
+});
+
+// Export patient records to CSV
+exportCsvButton.addEventListener("click", function () {
+
+    // Start with a copy of all patient records
+    let patientsToExport = [...patients];
+
+    // Apply the current search results
+    if (matchingSearchIds !== null) {
+        patientsToExport = patientsToExport.filter(function (patient) {
+            return matchingSearchIds.includes(patient.patientId);
+        });
+    }
+
+    // Apply the selected BMI filter
+    if (filterBmi.value !== "all") {
+        patientsToExport = patientsToExport.filter(function (patient) {
+            return patient.bmiCategory === filterBmi.value;
+        });
+    }
+
+    // Apply the current surname sorting
+    if (sortPatients.value === "surnameAZ") {
+        patientsToExport.sort(function (a, b) {
+            return a.lastName.localeCompare(b.lastName);
+        });
+    }
+
+    if (sortPatients.value === "surnameZA") {
+        patientsToExport.sort(function (a, b) {
+            return b.lastName.localeCompare(a.lastName);
+        });
+    }
+
+    // Do not export if no patients match the current filters
+    if (patientsToExport.length === 0) {
+        alert("No patient records available to export.");
+        return;
+    }
+
+
+    // Define the CSV column headings
+    const csvHeaders = [
+        "Patient ID",
+        "First Name",
+        "Surname",
+        "Date of Birth",
+        "Age",
+        "Sex",
+        "Height (cm)",
+        "Weight (kg)",
+        "BMI",
+        "BMI Category",
+        "Mobile",
+        "Email",
+        "Health Info"
+    ];
+
+    // Create a row for each patient
+    const csvRows = patientsToExport.map(function (patient) {
+        return [
+            patient.patientId,
+            patient.firstName,
+            patient.lastName,
+            patient.dateOfBirth,
+            patient.age,
+            patient.sex,
+            patient.height,
+            patient.weight,
+            patient.bmi,
+            patient.bmiCategory,
+            patient.mobile,
+            patient.email,
+            patient.healthInfo
+        ];
+
+    });
+
+
+    // Safely format each value for CSV
+    function escapeCsv(value) {
+        let text = String(value ?? "");
+
+        // Prevent spreadsheet formulas from being executed
+        if (/^[\s]*[=+\-@\t\r]/.test(text)) {
+            text = "'" + text;
+        }
+
+        return '"' + text.replace(/"/g, '""') + '"';
+    }
+
+    // Combine headings and patient rows
+    const csvContent = [csvHeaders, ...csvRows]
+        .map(function (row) {
+            return row.map(escapeCsv).join(",");
+        })
+        .join("\r\n");
+
+    // Create the downloadable CSV file
+    const csvFile = new Blob(["\uFEFF", csvContent], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const downloadUrl = URL.createObjectURL(csvFile);
+    const downloadLink = document.createElement("a");
+
+    downloadLink.href = downloadUrl;
+    downloadLink.download = "patient-records.csv";
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.remove();
+
+    URL.revokeObjectURL(downloadUrl);
+
 });
