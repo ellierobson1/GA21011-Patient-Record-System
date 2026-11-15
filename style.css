@@ -38,6 +38,13 @@ h2 {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 8px 0;
+}
+
+.patient-search-row #searchButton {
+    min-height: 42px;
+    padding: 10px 20px;
+    white-space: nowrap;
 }
 
 .patient-search-row label {
@@ -115,16 +122,27 @@ button {
     margin-top: 6px;
 }
 
-/* Patient form styling */
+
+
+/* Headings for patient form sections */
+
+.form-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #17324d;
+    margin: 28px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d8e0e5;
+}
 
 #patientForm {
     max-width: none;
     margin: 0;
     padding: 26px 32px 22px;
     background-color: #ffffff;
-    border: 1px solid #d1d1d1;
-    border-radius: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #dce5eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(16, 42, 67, 0.07);
 }
 
 .form-grid {
@@ -216,16 +234,16 @@ button:focus {
     box-sizing: border-box;
 }
 
-/* Patient area, search, edit and delete */
+/* Patient search and management panel */
 .patient-actions {
     max-width: 1000px;
     margin: 0 auto 35px;
     background-color: #ffffff;
-    border: 1px solid #d1dbe1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-
+    border: 1px solid #dce5eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(16, 42, 67, 0.07);
+    overflow: hidden;
 }
-
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -233,17 +251,14 @@ button:focus {
 }
 
 /* Headings in action panels*/
-.action-panel h2 {
+.action-panel h3 {
     font-size: 16px;
     font-weight: 600;
     color: #102a43;
     margin: 0 0 18px;
-    padding: 10px 12px;
-    background-color: #f5f7f8;
-    border-left: 3px solid #2f80c9;
-
+    padding: 0 0 12px;
+    border-bottom: 1px solid #d8e0e5;
 }
-
 
 /* Labels inside action panels*/
 .action-panel label {
@@ -254,37 +269,46 @@ button:focus {
 
 /*Inputs inside action panels*/
 .action-panel input {
-    width: 340px;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
     min-height: 42px;
+    padding: 10px 12px;
     margin: 0;
 }
-
 /* Search button */
 #searchButton {
     background-color: #003d78;
     color: #ffffff;
 }
 
-/* Edit button */
+/* Edit patient button */
+
 #editButton {
-    background-color: #007f3b;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #17324d;
+    border: 1px solid #b8c8d4;
+    border-radius: 4px;
 }
 
 #editButton:hover {
-    background-color: #005a30;
+    background-color: #edf3f8;
+    border-color: #17324d;
 }
 
-/* Delete button */
+/* Delete patient button */
+
 #deleteButton {
-    background-color: #d5281b;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #b42318;
+    border: 1px solid #d9a29e;
+    border-radius: 4px;
 }
 
 #deleteButton:hover {
-    background-color: #a82016;
+    background-color: #fff1f0;
+    border-color: #b42318;
 }
-
 
 /* Main application header */
 .system-header {
@@ -338,20 +362,28 @@ button:focus {
 
 .statistics-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
 }
-
 /* Individual statistic */
 
 .stat-card {
     background-color: #ffffff;
-    padding: 20px 28px;
+    padding: 24px 26px;
     text-align: left;
-    border: 1px solid #cbd5dc;
-    border-radius: 8px;
+    border: 1px solid #dce5eb;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(16, 42, 67, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Subtle dashboard card hover */
+.stat-card:hover {
+    background-color: #f8fafc;
+    border-color: #b8c8d4;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.10);
+}
 .stat-card h3 {
     color: #526575;
     font-size: 13px;
@@ -360,11 +392,12 @@ button:focus {
 }
 
 .stat-card p {
-    color: #102a43;
-    font-size: 30px;
-    font-weight: 650;
+    color: #005eb8;
+    font-size: 36px;
+    font-weight: 700;
     margin: 0;
     line-height: 1.2;
+    letter-spacing: -1px;
 }
 
 /* Patient records section */
@@ -588,26 +621,22 @@ button:focus {
     color: #842029;
 }
 
-/* BMI statistics card colours */
+/* Dashboard statistics card colours */
 
 .stat-card:nth-child(5) {
     background-color: #fff8e1;
-    border-top: 3px solid #d4a017;
 }
 
 .stat-card:nth-child(6) {
     background-color: #eaf7ee;
-    border-top: 3px solid #2e8b57;
 }
 
 .stat-card:nth-child(7) {
     background-color: #fff0dc;
-    border-top: 3px solid #d97706;
 }
 
 .stat-card:nth-child(8) {
     background-color: #fdebec;
-    border-top: 3px solid #c62828;
 }
 
 /* Patient Records filter toolbar */
@@ -804,18 +833,22 @@ tr.highlighted {
 }
 
 .patient-table th {
-    background-color: #e8eef3;
-    color: #243746;
+    background-color: #17324d;
+    color: #ffffff;
+    font-size: 12px;
     font-weight: 600;
+    letter-spacing: 0.3px;
     white-space: nowrap;
+    padding: 15px 16px;
 }
 
+/* Subtle alternating patient record rows */
 .patient-table tbody tr:nth-child(even) {
-    background-color: #f5f7f9;
+    background-color: #f7f9fb;
 }
 
 .patient-table tbody tr:hover {
-    background-color: #e8f2fa;
+    background-color: #edf5fc;
 }
 
 .patient-table tbody tr.highlighted {
@@ -826,22 +859,31 @@ tr.highlighted {
     font-size: 14px;
 }
 
-/* View patient details button */
+/* Patient details table action */
 
 .view-details-button {
-    padding: 8px 12px;
-    background-color: #005eb8;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
+    padding: 7px 12px;
+    background-color: #ffffff;
+    color: #005eb8;
+    border: 1px solid #b8c8d4;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
 }
 
 .view-details-button:hover {
-    background-color: #004a91;
+    background-color: #edf3f8;
+    border-color: #005eb8;
 }
 
+/* Visible keyboard focus for patient details */
+
+.view-details-button:focus-visible {
+    outline: 3px solid #ffbf47;
+    outline-offset: 3px;
+}
 /* Expanded patient details */
 
 .patient-details-row td {
@@ -929,9 +971,11 @@ tr.highlighted {
 
 .records-section .record-management-buttons {
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 12px;
-    padding-left: 113px;
+    padding-left: 0;
 }
 .records-section .record-management-buttons[hidden] {
     display: none;
@@ -943,4 +987,150 @@ tr.highlighted {
         justify-content: flex-start;
         margin-left: 0;
     }
+}
+
+/* Two-column layout for contact details and health measurements */
+
+@media (min-width: 801px) {
+    #patientForm .form-grid:has(#mobile),
+    #patientForm .form-grid:has(#height) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Stack contact and health fields on smaller screens */
+
+@media (max-width: 800px) {
+    #patientForm .form-grid:has(#mobile),
+    #patientForm .form-grid:has(#height) {
+        grid-template-columns: 1fr;
+    }
+}
+/* Refined patient form inputs */
+#patientForm input,
+#patientForm select,
+#patientForm textarea {
+    background-color: #fafcfe;
+    border: 1px solid #cbd5df;
+    border-radius: 7px;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background-color 0.2s ease;
+}
+
+#patientForm input:focus,
+#patientForm select:focus,
+#patientForm textarea:focus {
+    background-color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Subtle hover effect for patient records */
+#patientList tr:not(.patient-details-row) {
+    transition: background-color 0.2s ease;
+}
+
+#patientList tr:not(.patient-details-row):hover {
+    background-color: #eaf2f9;
+}
+
+/* Smooth button interactions */
+button {
+    transition: background-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+}
+
+button:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+}
+
+button:not(:disabled):active {
+    transform: translateY(0);
+}
+/* Clean section headings without horizontal lines */
+section h2 {
+    padding-bottom: 0;
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+section h2::after {
+    content: none;
+}
+
+
+/* Modern navigation underline */
+.main-navigation a {
+    position: relative;
+}
+
+.main-navigation a::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 5px;
+    height: 2px;
+    background-color: #005eb8;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.main-navigation a:hover::after,
+.main-navigation a:focus-visible::after,
+.main-navigation a.active::after {
+    transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .main-navigation a::after {
+        transition: none;
+    }
+}
+
+/* Improved patient records table */
+.patient-table tbody td {
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.patient-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+
+/* Keep selected patients clearly highlighted */
+.patient-table tbody tr.highlighted,
+.patient-table tbody tr.highlighted:hover {
+    background-color: #d6eaff;
+}
+
+/* Consistent spacing between main sections */
+.statistics-section,
+.patient-entry,
+.records-section {
+    margin-top: 45px;
+    margin-bottom: 45px;
+}
+
+@media (max-width: 600px) {
+    .statistics-section,
+    .patient-entry,
+    .records-section {
+        margin-top: 28px;
+        margin-bottom: 28px;
+    }
+}
+
+/* Improve spacing above the patient form */
+.patient-entry .section-heading {
+    margin-bottom: 14px;
+}
+
+.patient-entry #patientForm {
+    margin-top: 0;
 }
