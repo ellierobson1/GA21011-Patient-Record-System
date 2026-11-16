@@ -773,9 +773,27 @@ deleteButton.addEventListener("click", function () {
     }
 
     // Remove one patient from the array at the identified position
-
     patients.splice(patientIndex, 1);
-    recordManagementButtons.hidden = true; // Hide the edit and delete buttons after deletion
+
+    // If the deleted patient is currently being edited, reset the form
+    if (editingPatientId === patientToDelete.patientId) {
+        editingPatientId = null;
+        patientForm.reset();
+
+        document.getElementById("patientId").disabled = false;
+        submitButton.textContent = "Add Patient";
+        cancelEditButton.hidden = true;
+        clearButton.hidden = false;
+
+        formHeading.textContent = "Add Patient Record";
+        formInstructions.textContent = "Enter patient details below to add a new record.";
+        formMessage.textContent = "";
+    }
+
+    // Hide the edit and delete buttons after deletion
+    recordManagementButtons.hidden = true;
+
+    // Save the updated patient records
     localStorage.setItem("patients", JSON.stringify(patients));
 
     // Refresh the live search after deleting a patient
@@ -785,6 +803,7 @@ deleteButton.addEventListener("click", function () {
     deleteResult.textContent = "Patient deleted successfully.";
 });
 
+// Edit an existing patient record by patient ID
 //Edit an existing patient record by patient ID
 
 editButton.addEventListener("click", function () {
@@ -810,32 +829,32 @@ editButton.addEventListener("click", function () {
 
     }
 
-    // Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
-    editingPatientId = foundPatient.patientId;
-    submitButton.textContent = "Update Patient";
-    cancelEditButton.hidden = false;
-    clearButton.hidden = true;
-    formHeading.textContent = "  Edit Patient Record";
-    formInstructions.textContent = "Edit the patient details below and click 'Update Patient' to save changes.";
+// Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
+editingPatientId = foundPatient.patientId;
+submitButton.textContent = "Update Patient";
+cancelEditButton.hidden = false;
+clearButton.hidden = true;
+formHeading.textContent = "  Edit Patient Record";
+formInstructions.textContent = "Edit the patient details below and click 'Update Patient' to save changes.";
 
-    // Automatically scroll to the form for editing when a patient is found
-    patientForm.scrollIntoView({ behavior: "smooth" });
+// Automatically scroll to the form for editing when a patient is found
+patientForm.scrollIntoView({ behavior: "smooth" });
 
-    // Populate the form fields with the found patient's details for editing
+// Populate the form fields with the found patient's details for editing
 
-    document.getElementById("patientId").value = foundPatient.patientId;
-    document.getElementById("firstName").value = foundPatient.firstName;
-    document.getElementById("lastName").value = foundPatient.lastName;
-    document.getElementById("dateOfBirth").value = foundPatient.dateOfBirth;
-    document.getElementById("height").value = foundPatient.height;
-    document.getElementById("weight").value = foundPatient.weight;
-    document.getElementById("sex").value = foundPatient.sex;
-    document.getElementById("mobile").value = foundPatient.mobile;
-    document.getElementById("email").value = foundPatient.email;
-    document.getElementById("healthInfo").value = foundPatient.healthInfo;
-    document.getElementById("patientId").disabled = true;
-    editResult.textContent = "Patient found. You can now edit the details in the form below.";
-});
+document.getElementById("patientId").value = foundPatient.patientId;
+document.getElementById("firstName").value = foundPatient.firstName;
+document.getElementById("lastName").value = foundPatient.lastName;
+document.getElementById("dateOfBirth").value = foundPatient.dateOfBirth;
+document.getElementById("height").value = foundPatient.height;
+document.getElementById("weight").value = foundPatient.weight;
+document.getElementById("sex").value = foundPatient.sex;
+document.getElementById("mobile").value = foundPatient.mobile;
+document.getElementById("email").value = foundPatient.email;
+document.getElementById("healthInfo").value = foundPatient.healthInfo;
+document.getElementById("patientId").disabled = true;
+editResult.textContent = "Patient found. You can now edit the details in the form below.";
+    });
 
 //Clears the form fields and gets rid of patient details updated message
 patientForm.addEventListener("input", function () {
