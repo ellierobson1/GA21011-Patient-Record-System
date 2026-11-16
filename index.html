@@ -219,23 +219,24 @@
                     <div class="patient-search-row">
 
                         <label for="manageId">Search patients:</label>
-                        <input type="search" id="manageId" name="manageId" placeholder="Search by patient ID or name">
+                        <input type="search" id="manageId" name="manageId"
+                            placeholder="Type a patient name or ID to filter records.">
 
                         <div class="action-buttons">
-                            <button type="button" id="searchButton">Search</button>
+                            <button type="button" id="searchButton">Select Patient</button>
                         </div>
                     </div>
-                    <div class="record-management-buttons" id="recordManagementButtons" hidden>
-                        <button type="button" id="editButton">Edit</button>
-                        <button type="button" id="deleteButton">Delete</button>
+                        <div class="record-management-buttons" id="recordManagementButtons" hidden>
+                            <button type="button" id="editButton">Edit</button>
+                            <button type="button" id="deleteButton">Delete</button>
+
+                        </div>
+
+                        <div id="searchResult"></div>
+                        <p id="editResult"></p>
+                        <p id="deleteResult"></p>
 
                     </div>
-
-                    <div id="searchResult"></div>
-                    <p id="editResult"></p>
-                    <p id="deleteResult"></p>
-
-                </div>
 
             </section>
 
@@ -275,7 +276,7 @@
                 <!-- Reset filters and sorting options -->
 
                 <div class="control-group">
-                    <button type="button" id="resetFiltersButton">Show All Records</button>
+                    <button type="button" id="resetFiltersButton">Reset Search &amp; Filters</button>
                     <button type="button" id="exportCsvButton">Export CSV</button>
                 </div>
 

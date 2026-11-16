@@ -176,20 +176,32 @@ function displayPatients() {
             patientRow.classList.add("highlighted");
         }
 
-        // Create the patient table row
-        patientRow.innerHTML = `
-    <td>${patient.patientId}</td>
-    <td>${patient.firstName} ${patient.lastName}</td>
-    <td>${patient.dateOfBirth ? calculateAge(patient.dateOfBirth) : "Not recorded"}</td>
-    <td>${patient.sex}</td>
-    <td>${patient.bmi ?? "Not recorded"}</td>
-    <td>${patient.bmiCategory || "Not recorded"}</td>
-    <td>
-        <button type="button" class="view-details-button">
-            View Details
-        </button>
-    </td>
-`;
+        // Create table cells using safe text content
+        const cellValues = [
+            patient.patientId,
+            patient.firstName + " " + patient.lastName,
+            patient.dateOfBirth ? calculateAge(patient.dateOfBirth) : "Not recorded",
+            patient.sex,
+            patient.bmi ?? "Not recorded",
+            patient.bmiCategory || "Not recorded"
+        ];
+
+        cellValues.forEach(function (value) {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            patientRow.appendChild(cell);
+        });
+
+        // Create the View Details button
+        const actionCell = document.createElement("td");
+        const detailsButton = document.createElement("button");
+
+        detailsButton.type = "button";
+        detailsButton.className = "view-details-button";
+        detailsButton.textContent = "View Details";
+
+        actionCell.appendChild(detailsButton);
+        patientRow.appendChild(actionCell);
 
         // Add the patient row to the patient table
         patientList.appendChild(patientRow);
@@ -374,6 +386,9 @@ function updateStatistics() {
         return patient.bmiCategory === "Underweight";
     }).length;
 
+    underweightCount.textContent = underweightPatients;
+
+
     normalCount.textContent = patients.filter(function (patient) {
         return patient.bmiCategory === "Normal";
     }).length;
@@ -437,8 +452,8 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (lastName.length < 2 || lastName.length > 20) {
-        alert("Last Name must be between 2 and 20 characters.");
+    if (lastName.length < 2 || lastName.length > 30) {
+        alert("Last Name must be between 2 and 30 characters.");
         document.getElementById("lastName").focus();
         return;
     }
@@ -484,30 +499,23 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    const dob = new Date(dateOfBirth);
+    // Validate date of birth and calculate age
+    const dob = new Date(dateOfBirth + "T00:00:00");
     const today = new Date();
 
-    // Prevent future dates for date of birth and check that age is between 0 and 120 years
+    if (!dateOfBirth || Number.isNaN(dob.getTime())) {
+        alert("Please enter a valid Date of Birth.");
+        document.getElementById("dateOfBirth").focus();
+        return;
+    }
 
-    if (dob > today) {
+    if (dateOfBirth > localToday) {
         alert("Date of Birth cannot be in the future.");
         document.getElementById("dateOfBirth").focus();
         return;
     }
 
-    // Calculate patient age based on date of birth
-
-    let age = today.getFullYear() - dob.getFullYear();
-    const monthDifference = today.getMonth() - dob.getMonth();
-
-    // Subtract one year from age if the current month and day are before the birth month and day
-
-    if (
-        monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())
-
-    ) {
-        age--;
-    }
+    const age = calculateAge(dateOfBirth);
 
     if (age < 0 || age > 120) {
         alert("Age must be between 0 and 120 years.");
@@ -556,11 +564,19 @@ patientForm.addEventListener("submit", function (event) {
     };
     // Update the existing record when editing, otherwise add a new patient record to the patients array
 
+    const patientWasEdited = editingPatientId !== null;
+
     if (editingPatientId !== null) {
 
         const patientIndex = patients.findIndex(function (patient) {
             return patient.patientId === editingPatientId;
         });
+
+        if (patientIndex === -1) {
+            alert("Patient no longer exists. The update cannot be saved.");
+            return;
+        }
+
 
         // Replace the existing patient record with the updated patient object in the patients array
 
@@ -584,6 +600,11 @@ patientForm.addEventListener("submit", function (event) {
     // Save patient records to Local Storage
 
     localStorage.setItem("patients", JSON.stringify(patients));
+
+    // Clear the search after a successful patient update
+    if (patientWasEdited) {
+        manageId.value = "";
+    }
 
     // Refresh the live search after adding or editing a patient
     manageId.dispatchEvent(new Event("input"));
@@ -705,18 +726,21 @@ searchButton.addEventListener("click", function () {
 
     if (foundPatient) {
         searchResult.classList.remove("error");
-        searchResult.innerHTML = `
-    <strong>Patient found:</strong><br>
-    ${foundPatient.firstName} ${foundPatient.lastName}<br>
-    Patient ID: ${foundPatient.patientId}<br>
-    Date of Birth: ${foundPatient.dateOfBirth}<br>
-    Sex: ${foundPatient.sex}<br>
-    Age: ${foundPatient.dateOfBirth ? calculateAge(foundPatient.dateOfBirth) : "Not recorded"}<br>
-    BMI: ${foundPatient.bmi || "Not recorded"}<br>
-   BMI Category: ${foundPatient.bmiCategory || "Not recorded"}<br>
-    Mobile: ${foundPatient.mobile}<br>
-    Email: ${foundPatient.email}
-`;
+
+        searchResult.replaceChildren();
+
+        const heading = document.createElement("strong");
+        heading.textContent = "Patient found:";
+        searchResult.appendChild(heading);
+
+        const message = document.createElement("span");
+        message.textContent = " " + foundPatient.patientId +
+            " — " + foundPatient.firstName + " " + foundPatient.lastName +
+            ". Use the buttons above to edit or delete this patient record.";
+
+        searchResult.appendChild(message);
+
+
     } else {
         searchResult.classList.add("error");
         if (idToFind === "") {
@@ -829,32 +853,32 @@ editButton.addEventListener("click", function () {
 
     }
 
-// Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
-editingPatientId = foundPatient.patientId;
-submitButton.textContent = "Update Patient";
-cancelEditButton.hidden = false;
-clearButton.hidden = true;
-formHeading.textContent = "  Edit Patient Record";
-formInstructions.textContent = "Edit the patient details below and click 'Update Patient' to save changes.";
+    // Store the patient's ID so the submit event knows to edit the existing record instead of adding a new one
+    editingPatientId = foundPatient.patientId;
+    submitButton.textContent = "Update Patient";
+    cancelEditButton.hidden = false;
+    clearButton.hidden = true;
+    formHeading.textContent = "  Edit Patient Record";
+    formInstructions.textContent = "Edit the patient details below and click 'Update Patient' to save changes.";
 
-// Automatically scroll to the form for editing when a patient is found
-patientForm.scrollIntoView({ behavior: "smooth" });
+    // Automatically scroll to the form for editing when a patient is found
+    patientForm.scrollIntoView({ behavior: "smooth" });
 
-// Populate the form fields with the found patient's details for editing
+    // Populate the form fields with the found patient's details for editing
 
-document.getElementById("patientId").value = foundPatient.patientId;
-document.getElementById("firstName").value = foundPatient.firstName;
-document.getElementById("lastName").value = foundPatient.lastName;
-document.getElementById("dateOfBirth").value = foundPatient.dateOfBirth;
-document.getElementById("height").value = foundPatient.height;
-document.getElementById("weight").value = foundPatient.weight;
-document.getElementById("sex").value = foundPatient.sex;
-document.getElementById("mobile").value = foundPatient.mobile;
-document.getElementById("email").value = foundPatient.email;
-document.getElementById("healthInfo").value = foundPatient.healthInfo;
-document.getElementById("patientId").disabled = true;
-editResult.textContent = "Patient found. You can now edit the details in the form below.";
-    });
+    document.getElementById("patientId").value = foundPatient.patientId;
+    document.getElementById("firstName").value = foundPatient.firstName;
+    document.getElementById("lastName").value = foundPatient.lastName;
+    document.getElementById("dateOfBirth").value = foundPatient.dateOfBirth;
+    document.getElementById("height").value = foundPatient.height;
+    document.getElementById("weight").value = foundPatient.weight;
+    document.getElementById("sex").value = foundPatient.sex;
+    document.getElementById("mobile").value = foundPatient.mobile;
+    document.getElementById("email").value = foundPatient.email;
+    document.getElementById("healthInfo").value = foundPatient.healthInfo;
+    document.getElementById("patientId").disabled = true;
+    editResult.textContent = "Patient found. You can now edit the details in the form above.";
+});
 
 //Clears the form fields and gets rid of patient details updated message
 patientForm.addEventListener("input", function () {
@@ -979,7 +1003,7 @@ exportCsvButton.addEventListener("click", function () {
             patient.firstName,
             patient.lastName,
             patient.dateOfBirth,
-            patient.age,
+            calculateAge(patient.dateOfBirth),
             patient.sex,
             patient.height,
             patient.weight,
