@@ -13,7 +13,6 @@
 <body>
 
     <!-- Main header -->
-
     <header class="system-header">
         <div class="header-content">
 
@@ -22,7 +21,10 @@
                     <img src="assets/images/gplogo.png" alt="Patient Record System logo" class="site-logo">
                 </a>
 
-                <h1>Patient Record System</h1>
+                <div class="header-text">
+                    <h1>Patient Record System</h1>
+                    <p class="header-subtitle">GP Practice Administration</p>
+                </div>
             </div>
 
         </div>
@@ -30,80 +32,176 @@
 
     <!-- Main navigation -->
     <nav class="main-navigation" aria-label="Main navigation">
-        <a href="#statistics">Dashboard</a>
-        <a href="#add-patient">Add Patient</a>
-        <a href="#manage-patients">Manage Patients</a>
         <a href="#patient-records">Patient Records</a>
+        <a href="#add-patient">Add Patient</a>
+        <a href="#statistics">Practice Overview</a>
     </nav>
 
+    <!-- Patient Records -->
+    <section class="records-section" id="patient-records">
 
-    <!-- Patient Statistics -->
+        <div class="records-header">
 
-    <section class="statistics-section" id="statistics">
+            <div class="section-heading">
+                <h2>Patient Records</h2>
+                <p>Search, view and manage patient records.</p>
+            </div>
 
-        <div class="section-heading">
-            <h2>Patient Statistics</h2>
-            <p> Summary of patient information.</p>
+            <!-- Patient record management -->
+            <section class="patient-actions" id="manage-patients">
+
+                <div class="action-panel">
+
+                    <h3>Patient Search</h3>
+                    <p class="search-instructions">
+                        Type part of a name or ID to filter the list. Enter the full patient name or ID and click Select
+                        Patient to edit or delete a record.
+                    </p>
+                    <div class="patient-search-row">
+
+                        <label for="manageId">Search patients:</label>
+                        <input type="search" id="manageId" name="manageId" placeholder="Search by name or Patient ID">
+
+                        <div class="action-buttons">
+                            <button type="button" id="searchButton">Select Patient</button>
+                        </div>
+                    </div>
+                    <div class="record-management-buttons" id="recordManagementButtons" hidden>
+                        <button type="button" id="editButton">Edit</button>
+                        <button type="button" id="deleteButton">Delete</button>
+
+                    </div>
+
+                    <div id="searchResult"></div>
+                    <p id="editResult"></p>
+                    <p id="deleteResult"></p>
+
+                </div>
+
+            </section>
+
+            <div class="patient-controls">
+
+                <!-- Filter by sex -->
+                <div class="control-group">
+                    <label for="filterSex">Sex</label>
+                    <select id="filterSex">
+                        <option value="all">All Patients</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+
+                <!-- Filter by age range -->
+                <div class="control-group">
+                    <label for="filterAge">Age Range</label>
+                    <select id="filterAge">
+                        <option value="all">All Ages</option>
+                        <option value="under18">Under 18</option>
+                        <option value="18-49">18–49</option>
+                        <option value="50-64">50–64</option>
+                        <option value="65plus">65+</option>
+                    </select>
+                </div>
+
+                <!-- Filter BMI -->
+                <div class="control-group">
+                    <label for="filterBmi">BMI Category</label>
+
+
+                    <select id="filterBmi">
+                        <option value="all">All BMI Categories</option>
+                        <option value="Underweight">Underweight</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Overweight">Overweight</option>
+                        <option value="Obese">Obese</option>
+                    </select>
+
+                </div>
+
+
+
+                <!-- Sort patient records -->
+                <div class="control-group">
+                    <label for="sortPatients">Sort By</label>
+
+                    <select id="sortPatients">
+                        <option value="">Default order</option>
+                        <option value="surnameAZ">Surname A-Z</option>
+                        <option value="surnameZA">Surname Z-A</option>
+
+                    </select>
+
+                </div>
+
+                <!-- Reset filters and sorting options -->
+                <div class="control-group">
+                    <button type="button" id="resetFiltersButton">Reset Search &amp; Filters</button>
+                    <button type="button" id="exportCsvButton">Export CSV</button>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Displays patient statistics -->
 
-        <div class="statistics-grid">
+        <p id="recordCount"></p>
 
-            <div class="stat-card">
-                <h3>Total Patients</h3>
-                <p id="totalPatients">0</p>
 
-            </div>
+        <!-- Patient records table -->
+        <div class="patient-table-container" id="records-table">
+            <table id="patientTable" class="patient-table" aria-label="Patient records">
+                <thead>
+                    <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Sex</th>
+                        <th scope="col">BMI</th>
+                        <th scope="col">BMI Category</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
 
-            <div class="stat-card">
-                <h3>Average BMI - Male</h3>
-                <p id="averageBmiMale">0</p>
-            </div>
+                <tbody id="patientList">
+                    <!-- Patient records will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
 
-            <div class="stat-card">
-                <h3>Average BMI - Female</h3>
-                <p id="averageBmiFemale">0</p>
-            </div>
+        <!-- Patient records pagination -->
+        <div class="pagination-controls">
 
-            <div class="stat-card">
-                <h3>Female Patients Aged 50+</h3>
-                <p id="female50Plus">0</p>
-            </div>
+            <label for="recordsPerPage">Records per page:</label>
+            <select id="recordsPerPage">
+                <option value="10" selected>10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="all">Show All</option>
+            </select>
+            <button type="button" id="previousPage" disabled>
+                Previous
+            </button>
 
-            <div class="stat-card">
-                <h3>BMI: Underweight</h3>
-                <p id="underweightCount">0</p>
-            </div>
+            <span id="pageInfo">Page 1 of 1</span>
 
-            <div class="stat-card">
-                <h3>BMI: Normal</h3>
-                <p id="normalCount">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>BMI: Overweight</h3>
-                <p id="overweightCount">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>BMI: Obese</h3>
-                <p id="obeseCount">0</p>
-            </div>
+            <button type="button" id="nextPage" disabled>
+                Next
+            </button>
         </div>
 
     </section>
 
-    <!-- Patient Form -->
+    <!-- Add Patient section -->
     <section class="patient-entry" id="add-patient">
 
         <div class="section-heading">
-            <h2 id="formHeading"> Add Patient Record</h2>
+            <h2 id="formHeading">Add Patient</h2>
             <p id="formInstructions">Enter patient details below to add a new record.</p>
         </div>
 
         <!-- Patient input fields -->
-
         <form id="patientForm">
             <p class="required-note">* Required fields</p>
 
@@ -175,7 +273,7 @@
 
                 <div class="form-field">
                     <label for="weight">Weight (kg): <span class="required">*</span></label>
-                    <input type="number" id="weight" name="weight" min="1" max="200" step="0.1" placeholder="e.g. 60"
+                    <input type="number" id="weight" name="weight" min="1" max="200" step="0.01" placeholder="e.g. 60"
                         required>
                 </div>
 
@@ -191,6 +289,11 @@
 
             <div class="form-submit-area">
                 <p id="formMessage"></p>
+
+                <a href="#records-table" id="viewRecordsLink" hidden>
+                    View Patient Records
+                </a>
+
                 <button type="submit" id="submitButton">Add Patient</button>
                 <button type="button" id="clearButton">Clear Form</button>
                 <button type="button" id="cancelEditButton" hidden>Cancel Edit</button>
@@ -199,131 +302,65 @@
 
     </section>
 
-    <!-- Patient Records -->
-    <section class="records-section" id="patient-records">
 
-        <div class="records-header">
+    <!-- Patient Statistics -->
 
-            <div class="section-heading">
-                <h2>Patient Records</h2>
-                <p>Search, view and manage patient records.</p>
-            </div>
+    <section class="statistics-section" id="statistics">
 
-            <!-- Patient record management -->
+        <div class="section-heading">
+            <h2>Practice Overview</h2>
+            <p>Summary of registered patient information.</p>
+        </div>
 
-            <section class="patient-actions" id="manage-patients">
+        <!-- Displays patient statistics -->
 
-                <div class="action-panel">
+        <div class="statistics-grid">
 
-                    <h3>Find a Patient</h3>
-                    <div class="patient-search-row">
-
-                        <label for="manageId">Search patients:</label>
-                        <input type="search" id="manageId" name="manageId"
-                            placeholder="Type a patient name or ID to filter records.">
-
-                        <div class="action-buttons">
-                            <button type="button" id="searchButton">Select Patient</button>
-                        </div>
-                    </div>
-                        <div class="record-management-buttons" id="recordManagementButtons" hidden>
-                            <button type="button" id="editButton">Edit</button>
-                            <button type="button" id="deleteButton">Delete</button>
-
-                        </div>
-
-                        <div id="searchResult"></div>
-                        <p id="editResult"></p>
-                        <p id="deleteResult"></p>
-
-                    </div>
-
-            </section>
-
-            <div class="patient-controls">
-
-                <!-- Filter BMI -->
-
-                <div class="control-group">
-                    <label for="filterBmi">BMI Category</label>
-
-
-                    <select id="filterBmi">
-                        <option value="all">All BMI Categories</option>
-                        <option value="Underweight">Underweight</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Overweight">Overweight</option>
-                        <option value="Obese">Obese</option>
-                    </select>
-
-                </div>
-
-
-
-                <!-- Sort patient records -->
-                <div class="control-group">
-                    <label for="sortPatients">Sort By</label>
-
-                    <select id="sortPatients">
-                        <option value="">Default order</option>
-                        <option value="surnameAZ">Surname A-Z</option>
-                        <option value="surnameZA">Surname Z-A</option>
-
-                    </select>
-
-                </div>
-
-                <!-- Reset filters and sorting options -->
-
-                <div class="control-group">
-                    <button type="button" id="resetFiltersButton">Reset Search &amp; Filters</button>
-                    <button type="button" id="exportCsvButton">Export CSV</button>
-                </div>
+            <div class="stat-card">
+                <h3>Total Patients</h3>
+                <p id="totalPatients">0</p>
 
             </div>
 
-        </div>
+            <div class="stat-card">
+                <h3>Average BMI - Male</h3>
+                <p id="averageBmiMale">0</p>
+            </div>
 
+            <div class="stat-card">
+                <h3>Average BMI - Female</h3>
+                <p id="averageBmiFemale">0</p>
+            </div>
 
-        <p id="recordCount"></p>
+            <div class="stat-card">
+                <h3>Female Patients Aged 50+</h3>
+                <p id="female50Plus">0</p>
+            </div>
 
+            <div class="stat-card">
+                <h3>BMI: Underweight</h3>
+                <p id="underweightCount">0</p>
+            </div>
 
-        <!-- Patient records table -->
-        <div class="patient-table-container">
-            <table id="patientTable" class="patient-table" aria-label="Patient records">
-                <thead>
-                    <tr>
-                        <th scope="col">Patient ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Sex</th>
-                        <th scope="col">BMI</th>
-                        <th scope="col">BMI Category</th>
-                        <th scope="col">Details</th>
-                    </tr>
-                </thead>
+            <div class="stat-card">
+                <h3>BMI: Normal</h3>
+                <p id="normalCount">0</p>
+            </div>
 
-                <tbody id="patientList">
-                    <!-- Patient records will be dynamically inserted here -->
-                </tbody>
-            </table>
-        </div>
+            <div class="stat-card">
+                <h3>BMI: Overweight</h3>
+                <p id="overweightCount">0</p>
+            </div>
 
-        <!-- Patient records pagination -->
-        <div class="pagination-controls">
-            <button type="button" id="previousPage" disabled>
-                Previous
-            </button>
-
-            <span id="pageInfo">Page 1 of 1</span>
-
-            <button type="button" id="nextPage" disabled>
-                Next
-            </button>
+            <div class="stat-card">
+                <h3>BMI: Obese</h3>
+                <p id="obeseCount">0</p>
+            </div>
         </div>
 
     </section>
 
+    <!-- Footer -->
     <footer class="system-footer">
         <p>&copy; 2026 Patient Record System.
             Designed and developed by Ellie.</p>

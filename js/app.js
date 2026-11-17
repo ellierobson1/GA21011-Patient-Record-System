@@ -1,7 +1,4 @@
-
-
 // Get references to the HTML elements used by patient record system
-
 const patientForm = document.getElementById("patientForm");
 const submitButton = document.getElementById("submitButton");
 const formMessage = document.getElementById("formMessage");
@@ -25,6 +22,8 @@ const obeseCount = document.getElementById("obeseCount");
 const female50Plus = document.getElementById("female50Plus");
 const sortPatients = document.getElementById("sortPatients");
 const filterBmi = document.getElementById("filterBmi");
+const filterSex = document.getElementById("filterSex");
+const filterAge = document.getElementById("filterAge");
 const clearButton = document.getElementById("clearButton");
 const cancelEditButton = document.getElementById("cancelEditButton");
 const formHeading = document.getElementById("formHeading");
@@ -51,7 +50,8 @@ const nextPage = document.getElementById("nextPage");
 const pageInfo = document.getElementById("pageInfo");
 
 let currentPage = 1;
-const recordsPerPage = 10;
+const recordsPerPageSelect = document.getElementById("recordsPerPage");
+let recordsPerPage = 10;
 
 // Store patients in an array and track whether a patient is being edited
 let patients = [];
@@ -61,15 +61,18 @@ let matchingSearchIds = null;
 submitButton.textContent = "Add Patient";
 clearButton.hidden = false;
 
-// Load patients from Local Storage if available, convert JSON string
-//  back to an array of objects, and assign it to the patients variable
-
+// Load saved patient records from Local Storage
 if (savedPatients) {
-    patients = JSON.parse(savedPatients);
+    try {
+        const storedPatients = JSON.parse(savedPatients);
+
+        if (Array.isArray(storedPatients)) {
+            patients = storedPatients;
+        }
+    } catch (error) {
+        console.error("Could not load saved patient records:", error);
+    }
 }
-
-
-
 // Calculate a patient's current age from their date of birth
 function calculateAge(dateOfBirth) {
     const today = new Date();
@@ -91,7 +94,6 @@ function calculateAge(dateOfBirth) {
 
 
 // Display patient records on the page
-
 function displayPatients() {
     patientList.innerHTML = "";
 
@@ -112,6 +114,36 @@ function displayPatients() {
 
         });
 
+    }
+
+    // Filter patient records by sex
+    if (filterSex.value !== "all") {
+        patientsToDisplay = patientsToDisplay.filter(function (patient) {
+            return patient.sex === filterSex.value;
+        });
+    }
+
+    // Filter patient records by age range
+    if (filterAge.value !== "all") {
+        patientsToDisplay = patientsToDisplay.filter(function (patient) {
+            if (!patient.dateOfBirth) {
+                return false;
+            }
+
+            const age = calculateAge(patient.dateOfBirth);
+
+            if (filterAge.value === "under18") {
+                return age < 18;
+            } else if (filterAge.value === "18-49") {
+                return age >= 18 && age <= 49;
+            } else if (filterAge.value === "50-64") {
+                return age >= 50 && age <= 64;
+            } else if (filterAge.value === "65plus") {
+                return age >= 65;
+            }
+
+            return true;
+        });
     }
 
     // Sort patient records by surname if sorting option is selected
@@ -144,7 +176,6 @@ function displayPatients() {
     nextPage.disabled = currentPage === totalPages;
 
     // Show the total number of patient records displayed
-
     const recordCount = document.getElementById("recordCount");
     const firstRecord = patientsOnPage.length === 0 ? 0 : startIndex + 1;
     const lastRecord = startIndex + patientsOnPage.length;
@@ -186,9 +217,24 @@ function displayPatients() {
             patient.bmiCategory || "Not recorded"
         ];
 
-        cellValues.forEach(function (value) {
+        cellValues.forEach(function (value, index) {
             const cell = document.createElement("td");
             cell.textContent = value;
+
+            // Apply colour coding to the BMI category column
+            if (index === 5) {
+                const categoryClass = {
+                    Underweight: "bmi-underweight",
+                    Normal: "bmi-normal",
+                    Overweight: "bmi-overweight",
+                    Obese: "bmi-obese"
+                };
+
+                if (categoryClass[value]) {
+                    cell.classList.add(categoryClass[value]);
+                }
+            }
+
             patientRow.appendChild(cell);
         });
 
@@ -269,6 +315,15 @@ function displayPatients() {
 
 }
 
+// Change the number of patient records displayed per page
+recordsPerPageSelect.addEventListener("change", function () {
+    recordsPerPage = this.value === "all"
+    ? Math.max(1, patients.length)
+    : Number(this.value);
+
+    currentPage = 1;
+    displayPatients();
+});
 
 // Go to the previous page
 previousPage.addEventListener("click", function () {
@@ -295,6 +350,12 @@ manageId.addEventListener("input", function () {
     searchResult.textContent = "";
     editResult.textContent = "";
     deleteResult.textContent = "";
+
+    if (searchTerm === "") {
+        currentPage = 1;
+        displayPatients();
+        return;
+    }
 
     matchingSearchIds = patients
         .filter(function (patient) {
@@ -329,8 +390,19 @@ filterBmi.addEventListener("change", function () {
 
 });
 
-// Update patient statistics
+// Refresh patient records when the sex filter changes
+filterSex.addEventListener("change", function () {
+    currentPage = 1;
+    displayPatients();
+});
 
+// Refresh patient records when the age range changes
+filterAge.addEventListener("change", function () {
+    currentPage = 1;
+    displayPatients();
+});
+
+// Update patient statistics
 function updateStatistics() {
     totalPatients.textContent = patients.length;
 
@@ -340,7 +412,6 @@ function updateStatistics() {
     });
 
     // Calculate the total BMI of all male patients
-
     let totalMaleBmi = 0;
 
     malePatients.forEach(function (patient) {
@@ -348,7 +419,6 @@ function updateStatistics() {
     });
 
     // Calculate average male BMI
-
     if (malePatients.length > 0) {
         const maleAverage = totalMaleBmi / malePatients.length;
         averageBmiMale.textContent = maleAverage.toFixed(1);
@@ -358,7 +428,6 @@ function updateStatistics() {
     }
 
     // Get all female patients
-
     const femalePatients = patients.filter(function (patient) {
         return patient.sex === "Female" && !isNaN(Number(patient.bmi));
     });
@@ -371,7 +440,6 @@ function updateStatistics() {
     });
 
     // Calculate average female BMI 
-
     if (femalePatients.length > 0) {
         const femaleAverage = totalFemaleBmi / femalePatients.length;
         averageBmiFemale.textContent = femaleAverage.toFixed(1);
@@ -422,6 +490,7 @@ patientForm.addEventListener("submit", function (event) {
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const dateOfBirth = document.getElementById("dateOfBirth").value;
+
     // Convert height and weight values from string to number for calculations
 
     const height = Number(document.getElementById("height").value);
@@ -433,6 +502,12 @@ patientForm.addEventListener("submit", function (event) {
 
     // Validate patient details 
     // Check that the patient ID is unique, before adding or updating
+    if (patientId === "") {
+        alert("Patient ID is required.");
+        document.getElementById("patientId").focus();
+        return;
+    }
+
 
     const duplicateId = patients.some(function (patient) {
         const savedId = patient.patientId.replace(/\s+/g, "").toLowerCase();
@@ -458,7 +533,7 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    const namePattern = /^[A-Za-z '-]+$/;
+    const namePattern = /^(?=.*[A-Za-z])[A-Za-z '-]+$/;
 
     if (!namePattern.test(firstName)) {
         alert("First Name can only contain letters, apostrophes, spaces and hyphens.");
@@ -471,13 +546,13 @@ patientForm.addEventListener("submit", function (event) {
         document.getElementById("lastName").focus();
         return;
     }
-    if (height < 30 || height > 200) {
+    if (!Number.isFinite(height) || height < 30 || height > 200) {
         alert("Height must be between 30 and 200 cm.");
         document.getElementById("height").focus();
         return;
     }
 
-    if (weight < 1 || weight > 200) {
+    if (!Number.isFinite(weight) || weight < 1 || weight > 200) {
         alert("Weight must be between 1 and 200 kg.");
         document.getElementById("weight").focus();
         return;
@@ -501,7 +576,14 @@ patientForm.addEventListener("submit", function (event) {
 
     // Validate date of birth and calculate age
     const dob = new Date(dateOfBirth + "T00:00:00");
-    const today = new Date();
+
+    const currentDate = new Date();
+    const currentLocalDate =
+        currentDate.getFullYear() + "-" +
+        String(currentDate.getMonth() + 1).padStart(2, "0") + "-" +
+        String(currentDate.getDate()).padStart(2, "0");
+
+    dateOfBirthInput.max = currentLocalDate;
 
     if (!dateOfBirth || Number.isNaN(dob.getTime())) {
         alert("Please enter a valid Date of Birth.");
@@ -509,7 +591,7 @@ patientForm.addEventListener("submit", function (event) {
         return;
     }
 
-    if (dateOfBirth > localToday) {
+    if (dateOfBirth > currentLocalDate) {
         alert("Date of Birth cannot be in the future.");
         document.getElementById("dateOfBirth").focus();
         return;
@@ -522,9 +604,7 @@ patientForm.addEventListener("submit", function (event) {
         document.getElementById("dateOfBirth").focus();
         return;
     }
-
     // Convert height from cm to m and calculate BMI
-
     const heightInMetres = height / 100;
     const bmi = weight / (heightInMetres * heightInMetres);
 
@@ -534,7 +614,6 @@ patientForm.addEventListener("submit", function (event) {
     let bmiCategory = "";
 
     // Determine BMI category based on calculated BMI value
-
     if (bmi < 18.5) {
         bmiCategory = "Underweight";
     } else if (bmi < 25) {
@@ -546,7 +625,6 @@ patientForm.addEventListener("submit", function (event) {
     }
 
     // Create a patient object with all validated patient details
-
     const patient = {
         patientId: patientId,
         firstName: firstName,
@@ -563,7 +641,6 @@ patientForm.addEventListener("submit", function (event) {
         healthInfo: healthInfo
     };
     // Update the existing record when editing, otherwise add a new patient record to the patients array
-
     const patientWasEdited = editingPatientId !== null;
 
     if (editingPatientId !== null) {
@@ -577,15 +654,14 @@ patientForm.addEventListener("submit", function (event) {
             return;
         }
 
-
         // Replace the existing patient record with the updated patient object in the patients array
-
         patients[patientIndex] = patient;
 
         editingPatientId = null;
         submitButton.textContent = "Add Patient";
         clearButton.hidden = false;
         formMessage.textContent = "Patient details updated successfully.";
+        document.getElementById("viewRecordsLink").hidden = false;
         cancelEditButton.hidden = true;
         formHeading.textContent = "  Add Patient Record";
         formInstructions.textContent = "Enter patient details below to add a new record.";
@@ -594,11 +670,11 @@ patientForm.addEventListener("submit", function (event) {
 
         patients.unshift(patient);
         formMessage.textContent = "Patient added successfully.";
+        document.getElementById("viewRecordsLink").hidden = false;
 
     }
 
     // Save patient records to Local Storage
-
     localStorage.setItem("patients", JSON.stringify(patients));
 
     // Clear the search after a successful patient update
@@ -626,8 +702,7 @@ manageId.addEventListener("keydown", function (event) {
     }
 });
 
-//Search for patient by patient ID
-
+// Search for a patient by ID or name
 searchButton.addEventListener("click", function () {
     recordManagementButtons.hidden = true;
     editResult.textContent = "";
@@ -635,8 +710,7 @@ searchButton.addEventListener("click", function () {
     matchingSearchIds = null; // Clear the previous search results
     const idToFind = manageId.value.trim();
 
-    // Find a patient whose patientId matches the input value
-
+    // Find patients whose ID, first name, surname or full name matches the searchd a patient whose patientId matches the input value
     const matchingPatients = patients.filter(function (patient) {
         const searchTerm = idToFind.toLowerCase();
 
@@ -686,6 +760,12 @@ searchButton.addEventListener("click", function () {
         foundPatient.bmiCategory !== filterBmi.value) {
 
         filterBmi.value = "all";
+    }
+
+    // Reset other filters if they hide the selected patient
+    if (foundPatient) {
+        filterSex.value = "all";
+        filterAge.value = "all";
     }
     // Go to the page containing the searched patient
     if (foundPatient) {
@@ -752,8 +832,7 @@ searchButton.addEventListener("click", function () {
 
 });
 
-//Delete patient record by patient ID
-
+// Delete the selected patient record after confirmation
 deleteButton.addEventListener("click", function () {
     searchResult.textContent = "";
     editResult.textContent = "";
@@ -762,14 +841,12 @@ deleteButton.addEventListener("click", function () {
     const idToDelete = highlightedPatientId;
 
     // Validate that a patient ID has been entered before attempting to delete
-
     if (!idToDelete) {
         deleteResult.textContent = "Please search for and select a patient before deleting.";
         return;
     }
 
     // Find the array position of the patient that should be deleted
-
     const patientIndex = patients.findIndex(function (patient) {
         return patient.patientId.toLowerCase() === idToDelete.toLowerCase();
 
@@ -781,7 +858,6 @@ deleteButton.addEventListener("click", function () {
     }
 
     // Ask the user to confirm that they want to delete the patient
-
     const patientToDelete = patients[patientIndex];
 
     const confirmDelete = confirm(
@@ -828,8 +904,6 @@ deleteButton.addEventListener("click", function () {
 });
 
 // Edit an existing patient record by patient ID
-//Edit an existing patient record by patient ID
-
 editButton.addEventListener("click", function () {
     searchResult.textContent = "";
 
@@ -886,15 +960,17 @@ patientForm.addEventListener("input", function () {
 });
 
 //Cancel editing and reset the form to add a new patient
-cancelEditButton.addEventListener("click", function () {
+cancelEditButton.addEventListener("click", function () {    // Hide the View Patient Records link when cancelling
+
+    document.getElementById("viewRecordsLink").hidden = true;
     editingPatientId = null;
     patientForm.reset();
-
     document.getElementById("patientId").disabled = false;
     submitButton.textContent = "Add Patient";
     cancelEditButton.hidden = true;
     clearButton.hidden = false;
     formHeading.textContent = "  Add Patient Record";
+    formInstructions.textContent = "Enter patient details below to add a new record.";
     recordManagementButtons.hidden = true; // Hide the edit and delete buttons when cancelling edit
     formMessage.textContent = "Edit cancelled. You can now add a new patient.";
     editResult.textContent = "";
@@ -903,11 +979,14 @@ cancelEditButton.addEventListener("click", function () {
 // Clear form fields and reset the form to add a new patient
 clearButton.addEventListener("click", function () {
     patientForm.reset();
+    document.getElementById("viewRecordsLink").hidden = true;
     formMessage.textContent = "Form cleared. You can now add a new patient.";
 });
-
+// Reset all search, filter and sorting options to show the full patient list
 resetFiltersButton.addEventListener("click", function () {
     filterBmi.value = "all";
+    filterSex.value = "all";
+    filterAge.value = "all";
     sortPatients.value = "";
     manageId.value = "";
     matchingSearchIds = null;
@@ -956,6 +1035,36 @@ exportCsvButton.addEventListener("click", function () {
     if (filterBmi.value !== "all") {
         patientsToExport = patientsToExport.filter(function (patient) {
             return patient.bmiCategory === filterBmi.value;
+        });
+    }
+
+    // Apply the selected sex filter
+    if (filterSex.value !== "all") {
+        patientsToExport = patientsToExport.filter(function (patient) {
+            return patient.sex === filterSex.value;
+        });
+    }
+
+    // Apply the selected age range filter
+    if (filterAge.value !== "all") {
+        patientsToExport = patientsToExport.filter(function (patient) {
+            if (!patient.dateOfBirth) {
+                return false;
+            }
+
+            const age = calculateAge(patient.dateOfBirth);
+
+            if (filterAge.value === "under18") {
+                return age < 18;
+            } else if (filterAge.value === "18-49") {
+                return age >= 18 && age <= 49;
+            } else if (filterAge.value === "50-64") {
+                return age >= 50 && age <= 64;
+            } else if (filterAge.value === "65plus") {
+                return age >= 65;
+            }
+
+            return true;
         });
     }
 
@@ -1053,4 +1162,11 @@ exportCsvButton.addEventListener("click", function () {
 
     URL.revokeObjectURL(downloadUrl);
 
+});
+
+// Prevent accidental changes to height and weight when scrolling
+["height", "weight"].forEach(function (fieldId) {
+    document.getElementById(fieldId).addEventListener("wheel", function () {
+        this.blur();
+    });
 });
