@@ -37,7 +37,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 0;
+    padding: 8px 0 0;
 }
 
 .patient-search-row #searchButton {
@@ -94,8 +94,9 @@ button {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-
-
+    transition: background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 /* Main section heading */
@@ -114,13 +115,10 @@ button {
 }
 
 .section-heading p {
-    margin: 0;
+    margin: 6px 00;
     color: #60788d;
     font-size: 14px;
-    margin-top: 6px;
 }
-
-
 
 /* Headings for patient form sections */
 .form-section-title {
@@ -151,6 +149,7 @@ button {
 .form-field {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .form-field label {
@@ -189,6 +188,7 @@ button {
 
 #patientForm button {
     margin-left: 0;
+    border-radius: 7px;
     min-width: 120px;
     padding: 10px 20px;
     background-color: #1769aa;
@@ -284,7 +284,7 @@ button:focus {
     background-color: #ffffff;
     color: #17324d;
     border: 1px solid #b8c8d4;
-    border-radius: 4px;
+    border-radius: 7px;
 }
 
 #editButton:hover {
@@ -297,7 +297,7 @@ button:focus {
     background-color: #ffffff;
     color: #b42318;
     border: 1px solid #d9a29e;
-    border-radius: 4px;
+    border-radius: 7px;
 }
 
 #deleteButton:hover {
@@ -365,9 +365,9 @@ button:focus {
     background-color: #ffffff;
     padding: 24px 26px;
     text-align: left;
-    border: 1px solid #dce5eb;
+    border: 1px solid #cbd5df;
     border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(16, 42, 67, 0.06);
+    box-shadow: 0 4px 12px rgba(16, 42, 67, 0.10);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -380,8 +380,8 @@ button:focus {
 }
 
 .stat-card h3 {
-    color: #526575;
-    font-size: 13px;
+    color: #344b5c;
+    font-size: 14px;
     font-weight: 600;
     margin: 0 0 8px;
 }
@@ -441,12 +441,6 @@ button:focus {
     color: #526575;
 }
 
-#searchResult:not(:empty),
-#editResult:not(:empty),
-#deleteResult:not(:empty) {
-    padding-top: 12px;
-    border-top: 1px solid #e1e6e9;
-}
 
 /* Application footer styling */
 .system-footer {
@@ -497,17 +491,15 @@ button:focus {
     background-color: #2563a6;
     color: white;
     padding: 10px 18px;
-    border-radius: 6px;
+    border-radius: 7px;
+    min-height: 42px;
+    margin-left: auto;
 }
 
 #resetFiltersButton:hover {
     background-color: #174a80;
 }
 
-#resetFiltersButton:focus-visible {
-    outline: 3px solid #f59e0b;
-    outline-offset: 3px;
-}
 
 /* Patient record count */
 #recordCount {
@@ -522,14 +514,12 @@ button:focus {
 @media (max-width: 600px) {
 
     .patient-search-row {
-        display: flex;
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
     }
 
     .action-buttons {
-        display: flex;
         flex-wrap: wrap;
         gap: 10px;
     }
@@ -539,11 +529,6 @@ button:focus {
         width: 100%;
         min-width: 0;
     }
-}
-
-/* Keep form fields inside the screen */
-.form-field {
-    min-width: 0;
 }
 
 /* Form buttons on mobile */
@@ -610,23 +595,8 @@ button:focus {
 }
 
 
-#resetFiltersButton {
-    margin-left: auto;
-}
-
-/* Filter toolbar on smaller screens */
+/* Reset Filters button on smaller screens */
 @media (max-width: 900px) {
-    .patient-controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .control-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-
     #resetFiltersButton {
         width: 100%;
         margin-left: 0;
@@ -704,6 +674,7 @@ tr.highlighted {
     font-weight: 600;
     text-decoration: none;
     border-radius: 6px;
+    position: relative;
     transition: background-color 0.2s, color 0.2s;
 }
 
@@ -788,17 +759,13 @@ tr.highlighted {
     background-color: #edf5fc;
 }
 
-.patient-table tbody tr.highlighted {
-    background-color: #d6eaff;
-}
-
 /* Patient details table action */
 .view-details-button {
     padding: 7px 12px;
     background-color: #ffffff;
     color: #005eb8;
     border: 1px solid #b8c8d4;
-    border-radius: 4px;
+    border-radius: 7px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -810,11 +777,6 @@ tr.highlighted {
     border-color: #005eb8;
 }
 
-/* Visible keyboard focus for patient details */
-.view-details-button:focus-visible {
-    outline: 3px solid #ffbf47;
-    outline-offset: 3px;
-}
 
 /* Expanded patient details */
 .patient-details-row td {
@@ -878,11 +840,6 @@ tr.highlighted {
     cursor: not-allowed;
 }
 
-.pagination-controls button:focus-visible {
-    outline: 3px solid #ffbf47;
-    outline-offset: 2px;
-}
-
 #pageInfo {
     font-size: 14px;
     font-weight: 600;
@@ -892,11 +849,12 @@ tr.highlighted {
 .records-section .patient-actions {
     width: 100%;
     max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 16px;
-    margin-top: 0;
+    margin: 0;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    box-shadow: none;
 }
+
 
 .records-section .record-management-buttons {
     display: flex;
@@ -959,13 +917,6 @@ tr.highlighted {
     background-color: #eaf2f9;
 }
 
-/* Smooth button interactions */
-button {
-    transition: background-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-}
-
 button:not(:disabled):hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
@@ -984,12 +935,6 @@ section h2 {
 
 section h2::after {
     content: none;
-}
-
-
-/* Modern navigation underline */
-.main-navigation a {
-    position: relative;
 }
 
 .main-navigation a::after {
@@ -1058,14 +1003,6 @@ section h2::after {
     margin-bottom: 14px;
 }
 
-/* Visually connect Patient Search and filters */
-.records-section .patient-actions {
-    margin-bottom: 0;
-    border-radius: 12px 12px 0 0;
-    border-bottom: none;
-    box-shadow: none;
-}
-
 .records-section .patient-controls {
     margin-top: 0;
     background-color: #ffffff;
@@ -1118,7 +1055,6 @@ section h2::after {
 @media (max-width: 900px) {
 
     .patient-controls {
-        display: grid;
         grid-template-columns: 1fr;
         gap: 18px;
     }
@@ -1126,7 +1062,6 @@ section h2::after {
     .patient-controls .control-group {
         width: 100%;
     }
-
 
     .patient-controls>.control-group:last-child {
         flex-direction: column;
@@ -1140,9 +1075,6 @@ section h2::after {
 
 
 /* Practice Overview statistic number colours */
-.stat-card:nth-child(1) p {
-    color: #005eb8;
-}
 
 .stat-card:nth-child(2) p {
     color: #345b83;
@@ -1156,34 +1088,10 @@ section h2::after {
     color: #24766d;
 }
 
-.stat-card:nth-child(5) p {
-    color: #8a6500;
-}
-
-.stat-card:nth-child(6) p {
-    color: #237447;
-}
-
-.stat-card:nth-child(7) p {
-    color: #a45a1b;
-}
-
-.stat-card:nth-child(8) p {
-    color: #a43845;
-}
 
 /* Clinical-style Practice Overview cards */
 .statistics-grid .stat-card {
     background-color: #ffffff;
-}
-
-/* Header subtitle */
-.header-subtitle {
-    display: block;
-    color: #b8d2e5;
-    font-size: 14px;
-    font-weight: 400;
-    margin: 6px 0 0;
 }
 
 /* Stack header title and subtitle */
@@ -1197,13 +1105,7 @@ section h2::after {
     margin: 0;
 }
 
-.header-text .header-subtitle {
-    margin: 4px 0 0;
-}
-
-
-.header-title .header-text h1,
-.header-title .header-text .header-subtitle {
+.header-title .header-text h1 {
     display: block;
     width: 100%;
 }
@@ -1212,13 +1114,6 @@ section h2::after {
 @media (max-width: 600px) {
     .system-header {
         padding: 14px 20px;
-    }
-}
-
-/* Compact mobile patient search panel */
-@media (max-width: 600px) {
-    .records-section .action-panel {
-        padding-bottom: 8px;
     }
 }
 
@@ -1249,6 +1144,7 @@ section h2::after {
     background-color: #fce8e6;
     color: #a61b1b;
 }
+
 /* Pagination layout on mobile */
 @media (max-width: 600px) {
     .pagination-controls {
@@ -1286,4 +1182,90 @@ section h2::after {
         width: 100%;
         padding: 10px 8px;
     }
+}
+
+/* Dashboard percentage styling */
+.stat-card small {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Match dashboard BMI cards to patient table colours */
+.statistics-grid .stat-card:nth-child(5) {
+    background-color: #e3f2fd;
+}
+
+.statistics-grid .stat-card:nth-child(6) {
+    background-color: #e6f4ea;
+}
+
+.statistics-grid .stat-card:nth-child(7) {
+    background-color: #fff3cd;
+}
+
+.statistics-grid .stat-card:nth-child(8) {
+    background-color: #fce8e6;
+}
+
+/* Match dashboard BMI number colours */
+.stat-card:nth-child(5) p {
+    color: #174ea6;
+}
+
+.stat-card:nth-child(6) p {
+    color: #176b35;
+}
+
+.stat-card:nth-child(7) p {
+    color: #805600;
+}
+
+.stat-card:nth-child(8) p {
+    color: #a61b1b;
+}
+
+/* Logout */
+.logout-button {
+    background-color: transparent;
+    color: #b8d2e5;
+    border: 1px solid #b8d2e5;
+    border-radius: 6px;
+    padding: 10px 16px;
+    white-space: nowrap;
+    cursor: not-allowed;
+}
+
+/* Match search field to filter styling */
+.patient-search-row input {
+    border-radius: 7px;
+    background-color: #fafcfe;
+    border: 1px solid #cbd5df;
+}
+
+/* Patient action button styling */
+#searchButton,
+#exportCsvButton {
+    border-radius: 7px;
+    min-height: 42px;
+}
+
+/* Reduce spacing in the patient search */
+.records-section .action-panel {
+    padding-bottom: 12px;
+}
+
+/* Consistent keyboard focus throughout the application */
+button:focus-visible,
+.main-navigation a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+#resetFiltersButton:focus-visible,
+.view-details-button:focus-visible,
+.pagination-controls button:focus-visible,
+.patient-controls .control-group select:focus-visible {
+    outline: 3px solid #ffdd00;
+    outline-offset: 3px;
+    box-shadow: none;
 }

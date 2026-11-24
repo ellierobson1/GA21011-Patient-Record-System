@@ -73,6 +73,7 @@ if (savedPatients) {
         console.error("Could not load saved patient records:", error);
     }
 }
+
 // Calculate a patient's current age from their date of birth
 function calculateAge(dateOfBirth) {
     const today = new Date();
@@ -448,7 +449,6 @@ function updateStatistics() {
 
     }
 
-
     // Count patients in each BMI category
     const underweightPatients = patients.filter(function (patient) {
         return patient.bmiCategory === "Underweight";
@@ -469,6 +469,18 @@ function updateStatistics() {
         return patient.bmiCategory === "Obese";
     }).length;
 
+     // Calculate the percentage of patients in each BMI category
+    function calculatePercentage(count) {
+        return patients.length === 0
+            ? "0%"
+            : ((count / patients.length) * 100).toFixed(1) + "% of patients";
+    }
+
+    document.getElementById("underweightPercentage").textContent = calculatePercentage(Number(underweightCount.textContent));
+    document.getElementById("normalPercentage").textContent = calculatePercentage(Number(normalCount.textContent));
+    document.getElementById("overweightPercentage").textContent = calculatePercentage(Number(overweightCount.textContent));
+    document.getElementById("obesePercentage").textContent = calculatePercentage(Number(obeseCount.textContent));       
+    
 
 
     // Count female patients aged 50 or above

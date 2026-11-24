@@ -23,16 +23,17 @@
 
                 <div class="header-text">
                     <h1>Patient Record System</h1>
-                    <p class="header-subtitle">GP Practice Administration</p>
                 </div>
             </div>
+
+             <button class="logout-button" disabled>Log out</button>
 
         </div>
     </header>
 
     <!-- Main navigation -->
     <nav class="main-navigation" aria-label="Main navigation">
-        <a href="#patient-records">Patient Records</a>
+        <a href="#patient-records" class="active">Patient Records</a>
         <a href="#add-patient">Add Patient</a>
         <a href="#statistics">Practice Overview</a>
     </nav>
@@ -340,21 +341,25 @@
             <div class="stat-card">
                 <h3>BMI: Underweight</h3>
                 <p id="underweightCount">0</p>
+                <small id="underweightPercentage">0% of patients</small>
             </div>
 
             <div class="stat-card">
                 <h3>BMI: Normal</h3>
                 <p id="normalCount">0</p>
+                <small id="normalPercentage">0%</small>
             </div>
 
             <div class="stat-card">
                 <h3>BMI: Overweight</h3>
                 <p id="overweightCount">0</p>
+                <small id="overweightPercentage">0%</small>
             </div>
 
             <div class="stat-card">
                 <h3>BMI: Obese</h3>
                 <p id="obeseCount">0</p>
+                <small id="obesePercentage">0%</small>
             </div>
         </div>
 
